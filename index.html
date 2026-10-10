@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <meta name="color-scheme" content="light"/>
-<title>羽绒水洗生产线 · 四箱风选分级</title>
+<title>羽绒水洗生产线 · 水洗、脱水、烘干、冷却、分拣</title>
 <style>
   html,body{margin:0;height:100%;overflow:hidden;background:#e3e7ea;
     font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;}
@@ -61,37 +61,38 @@
 <div id="vignette"></div>
 <div id="panel">
   <h1>羽绒水洗生产线 · 3D 结构复原</h1>
-  <div class="sub">水洗机按实拍照片重建<br/>末道工序：按描述展示四箱风选分级原理</div>
+  <div class="sub">水洗机按实拍照片重建<br/>末道工序：分拣（四箱风选原理）</div>
   <div class="btns">
     <button id="bView">重置视角</button>
     <button id="bExplode">爆炸视图</button>
     <button id="bAnim" class="on">运行动画</button>
     <button id="bLabel" class="on">显示标签</button>
     <button id="bTour">工艺巡览</button>
-    <button id="bSort">风选演示</button>
+    <button id="bSort">分拣演示</button>
     <button id="bOrbit">自动环绕</button>
     <button id="bShot">截图 PNG</button>
   </div>
   <div id="mods"></div>
 </div>
 <div id="info"><b>使用说明</b>
-<b>①水洗机 → ②PSL脱水机 → ③烘干机 → ④冷却箱 → ⑤四箱风选</b> 五大主机带编号标注；
+<b>①水洗 → ②脱水 → ③烘干 → ④冷却 → ⑤分拣</b> 五大主机带编号标注；
 点击任意设备 → 左下角显示结构说明，镜头自动聚焦；悬停设备高亮。
 「工艺巡览」：沿五大主机依次走一遍，<b>面向视角的设备表面自动变透明</b>，
-点击「风选演示」：四个直立箱沿风向串联，重料留第一箱；越轻越高、越轻越远，最轻绒朵到第四箱。
+4500 片羽毛连续经过五道工序，同一片羽毛的类别、形态和颜色保持一致。
+点击「分拣演示」：四个直立箱沿风向由矮到高排列，重料留在最矮的第一箱；越轻飞得越高、越远，最轻绒朵到最高的第四箱。
 <span class="ev">料斗/管廊/平台/电控柜为辅助设施（不编号、不进巡览），可在左侧列表隐藏。</span></div>
 <div id="tip">左键拖动旋转 · 滚轮缩放 · 右键平移 · 点击设备聚焦</div>
 <div id="sortPanel">
-  <b>四箱串联 · 越轻越高越远</b>
-  <p>第一箱混合进料 → 向前上扬 → 越过隔板 → 分箱截留</p>
+  <b>分拣 · 四箱由矮到高</b>
+  <p>混合进料 → 向前上扬 → 分箱 → 旋转飘落</p>
   <div class="grade" style="--grade:#d89b5d"><i></i>① 第一箱 · 重毛片<span class="count" id="sortCount0">0</span></div>
   <div class="grade" style="--grade:#94a3b8"><i></i>② 第二箱 · 中重毛片<span class="count" id="sortCount1">0</span></div>
   <div class="grade" style="--grade:#53c6d9"><i></i>③ 第三箱 · 轻羽毛<span class="count" id="sortCount2">0</span></div>
   <div class="grade" style="--grade:#a5e6d0"><i></i>④ 第四箱 · 轻质绒朵<span class="count" id="sortCount3">0</span></div>
-  <button id="sortRestart">重新投料</button>
-  <small>重料留近端，轻绒飞得更高、更远。<br/>颜色区分类别，数字为累计截留量；参数与结构用于原理示意。</small>
+  <button id="sortRestart">全程重新投料</button>
+  <small>重料箱最矮，沿风向箱体依次升高；越轻飞得越高、越远，入箱后旋转飘落。<br/>颜色区分类别，数字为箱底累计收集量；参数与结构用于原理示意。</small>
 </div>
-<div id="loading"><div class="spin"></div><div>正在初始化 3D 场景与四箱风选…</div></div>
+<div id="loading"><div class="spin"></div><div>正在初始化 3D 场景与分拣演示…</div></div>
 
 
 
@@ -1824,7 +1825,7 @@ function unglow(mod) { mod.mats.forEach(m => { m.emissive.setHex(m.userData.base
 
 /* ---------- ② 水洗机（按现场照片重建：前端圆门/顶部控制柜/四支腿） ---------- */
 {
-  const g = addModule(1, '水洗机', new THREE.Vector3(-10.5, 0, 0), 1.9,
+  const g = addModule(1, '水洗', new THREE.Vector3(-10.5, 0, 0), 1.9,
     new THREE.Vector3(0, 4.05, 0),
     '按现场实拍照片重建：卧式滚筒水洗机——前端大圆门（视镜+把手+铰链座）、顶部控制柜（按钮/仪表/小屏）、四支腿带调平脚落地。\n尺寸：∅2.3m × 3.2m。\n工序：加绒→初洗→精洗（加清洗剂脱脂）→漂洗（浴比约30:1，55–65℃）。');
   const spin = new THREE.Group(); spin.position.set(0, 1.95, 0); g.add(spin);
@@ -1866,7 +1867,7 @@ function unglow(mod) { mod.mats.forEach(m => { m.emissive.setHex(m.userData.base
 
 /* ---------- ③ PSL 平板式脱水机（照片 6173d / 视频2 f11） ---------- */
 {
-  const g = addModule(2, 'PSL 平板式脱水机', new THREE.Vector3(-2, 0, 0), 2.0,
+  const g = addModule(2, '脱水', new THREE.Vector3(-2, 0, 0), 2.0,
     new THREE.Vector3(0, 3.75, 0),
     '平板式离心脱水机（PSL）：平板机座 + 三点阻尼减振支腿，内部立式转鼓高速离心甩水，翻盖加料，底盘下方出水管排液。\n照片细节：正面板3只仪表、下部按钮区、上部设备名喷字。\n模型尺寸：约1.9×1.6×3.2m(高)。');
   [[-0.7, 0.5], [0.7, 0.5], [0, -0.6]].forEach(p =>
@@ -1894,7 +1895,7 @@ function unglow(mod) { mod.mats.forEach(m => { m.emissive.setHex(m.userData.base
 
 /* ---------- ④ 卧式滚筒烘干机（视频1 f02/f04 · PD-cj-9-7） ---------- */
 {
-  const g = addModule(3, '滚筒烘干机', new THREE.Vector3(4.5, 0, 0), 2.6,
+  const g = addModule(3, '烘干', new THREE.Vector3(4.5, 0, 0), 2.6,
     new THREE.Vector3(0, 5.5, 0),
     '整线核心大件：∅2.8m×6m 卧式滚筒，两道滚圈骑在托轮组上，一端传动；筒体均布环向加强箍；高端45°斜置排风管带喇叭口，筒顶方管接工艺管路；旁设绿色漆柱检修平台。\n⚠ 机身贴有限空间作业安全告知牌，编号 PD-cj-9-7（照片 64abff）。\n工序参数（公开资料）：烘毛箱通110–130℃蒸汽。');
   box(g, 7.0, 0.3, 3.4, M.steelDark, 0, 0.15, 0);
@@ -1940,7 +1941,7 @@ function unglow(mod) { mod.mats.forEach(m => { m.emissive.setHex(m.userData.base
 /* ---------- ⑤ 冷却除尘箱（视频2 f05） ---------- */
 let fanGroup;
 {
-  const g = addModule(4, '冷却除尘箱', new THREE.Vector3(10.8, 0, 0), 2.6,
+  const g = addModule(4, '冷却', new THREE.Vector3(10.8, 0, 0), 2.6,
     new THREE.Vector3(0, 6.2, 0),
     '烘干后羽绒的立式方箱冷却/整理设备（公开工艺：烘干→冷却→除残留灰尘）：顶部圆形接口装轴流风机（带防护格栅），侧面管道接后续工段，底部挂小直径捕集/集尘筒。\n模型尺寸：2.4×2.4×5.2m(含风机)。');
   rbox(g, 2.4, 4.6, 2.4, M.body, 0, 2.3, 0, 0.05);
@@ -1985,9 +1986,9 @@ const SORTER = {
 };
 let sorterGroup;
 {
-  const g = sorterGroup = addModule(5, '四箱串联风选机', SORTER.origin, 2.6,
+  const g = sorterGroup = addModule(5, '分拣', SORTER.origin, 2.6,
     new THREE.Vector3(4.35, 8.92, 0),
-    '四个直立箱沿风向依次排开，箱底在同一地面。风从入口斜向右上吹：重料吹不走，留在第一箱；较轻羽毛飞得更高，经过隔板上方的连通口进入更远的箱。最轻绒朵进入第四箱并由末端收料网截留。\n透明外壳用于观察，不做向下落料；为风选原理示意，非实测设备参数。', true);
+    '四个直立箱共用同一地面，沿风向由矮到高形成阶梯：装重料的第一箱最矮，装最轻绒朵的第四箱最高。风从入口斜向右上吹，重料留在第一箱；较轻羽毛越过前箱敞口，继续向更高、更远的箱体飞行，由对应箱的竖直收料网拦住。\n入箱后羽毛离开主气流，受重力和空气阻力作用，一边翻转一边飘落到箱底；轻绒下落更慢。前三箱顶部敞开，透明侧壁便于观察；为分拣原理示意，非实测设备参数。', true);
   g.name = 'fourBinAirClassifier';
   const glass = pbr({ color: 0xa9d5e4, transparent: true, opacity: 0.07,
     roughness: 0.25, metalness: 0.04, side: THREE.DoubleSide, depthWrite: false });
@@ -2013,10 +2014,10 @@ let sorterGroup;
     sp.position.set(x, y, z); sp.scale.set(width, width / 6, 1); sp.name = 'classifier_label_' + text; g.add(sp); return sp;
   }
   panel('base', 10.44, 0.20, 2.32, M.plinth, 4.35, 0.18, 0);
-  // 四个落地直立箱的底板、观察门和独立金属框；箱内没有漏斗或水平分层。
+  // 四个落地直立箱从重料到轻绒依次升高；前三箱敞口供羽毛向上越过。
   for (const b of SORTER.bins) {
-    const k = b.grade, w = b.maxX - b.minX, h = SORTER.maxY - SORTER.minY;
-    b.centerX = (b.minX + b.maxX) / 2; b.floorY = SORTER.minY; b.topY = SORTER.maxY;
+    b.centerX = (b.minX + b.maxX) / 2; b.floorY = SORTER.minY; b.topY = b.gateY;
+    const k = b.grade, w = b.maxX - b.minX, h = b.topY - b.floorY;
     b.halfDepth = SORTER.halfDepth; b.entryX = b.minX + 0.08;
     const gradeMat = pbr({ color: b.color, metalness: 0.28, roughness: 0.44 });
     const tint = glass.clone(); tint.color.setHex(b.color); tint.userData.baseTransparent = true; tint.userData.xray = tint.opacity;
@@ -2029,16 +2030,18 @@ let sorterGroup;
       for (const x of [b.minX, b.maxX]) bp('upright_' + x + '_' + z, 0.055, h + 0.05, 0.055, frame, x, (b.floorY + b.topY) / 2, z);
     }
     bp('doorDivider', 0.028, h - 0.12, 0.032, frame, b.centerX, (b.floorY + b.topY) / 2, 1.027);
-    bp('doorHandle', 0.038, 0.33, 0.11, darkFrame, b.centerX + 0.15, 3.00, 1.05);
-    for (const y of [1.45, 6.65]) bp('doorHinge_' + y, 0.04, 0.14, 0.065, M.steelHi, b.maxX - 0.06, y, 1.045);
+    bp('doorHandle', 0.038, 0.33, 0.11, darkFrame, b.centerX + 0.15, b.floorY + h * 0.40, 1.05);
+    for (const y of [b.floorY + h * 0.18, b.floorY + h * 0.82]) bp('doorHinge_' + y, 0.04, 0.14, 0.065, M.steelHi, b.maxX - 0.06, y, 1.045);
     bp('gradeStripe', w - 0.12, 0.11, 0.025, gradeMat, b.centerX, 0.65, 1.026);
-    bp('upperGradeStripe', w - 0.12, 0.075, 0.025, gradeMat, b.centerX, 7.86, 1.026);
-    // 顶部只有开放格栅，三个跨箱通道中不放横盖。
-    for (let x = b.minX + 0.13; x < b.maxX; x += 0.25) bp('topMesh_' + x.toFixed(2), 0.014, 0.014, 1.95, frame, x, b.topY + 0.015, 0);
-    for (const z of [-0.66, -0.33, 0, 0.33, 0.66]) bp('topMeshRail_' + z, w, 0.014, 0.014, frame, b.centerX, b.topY + 0.015, z);
+    bp('upperGradeStripe', w - 0.12, 0.075, 0.025, gradeMat, b.centerX, b.topY - 0.14, 1.026);
+    // 前三箱不放顶盖或横向格栅，羽毛可从敞口升向下一箱；末箱保留透气顶网。
+    if (k === 3) {
+      for (let x = b.minX + 0.13; x < b.maxX; x += 0.25) bp('topMesh_' + x.toFixed(2), 0.014, 0.014, 1.95, frame, x, b.topY + 0.015, 0);
+      for (const z of [-0.66, -0.33, 0, 0.33, 0.66]) bp('topMeshRail_' + z, w, 0.014, 0.014, frame, b.centerX, b.topY + 0.015, z);
+    }
     b.label = smallLabel(b.title, b.color, b.centerX, 1.10, 1.15);
   }
-  // 每道下部收料网竖直起于同一箱底，上方留大矩形连通口；越轻越过越远。
+  // 收料网竖直起于同一箱底，网顶与对应箱顶齐平；越轻越过越远。
   for (let i = 0; i < 3; i++) {
     const b = SORTER.bins[i], y = SORTER.gates[i];
     const net = new THREE.Group(); net.name = 'classifier_partition_' + i; g.add(net);
@@ -2050,7 +2053,7 @@ let sorterGroup;
   }
   // 入料口保持与冷却器连续管道同轴，左外壁给入口留孔。
   panel('leftWallLower', 0.018, 3.30 - SORTER.minY, 1.96, glass, -0.70, (SORTER.minY + 3.30) / 2, 0);
-  panel('leftWallUpper', 0.018, 8.00 - 3.90, 1.96, glass, -0.70, (8.00 + 3.90) / 2, 0);
+  panel('leftWallUpper', 0.018, SORTER.bins[0].topY - 3.90, 1.96, glass, -0.70, (SORTER.bins[0].topY + 3.90) / 2, 0);
   for (const z of [-0.65, 0.65]) panel('leftWallFeedSide_' + z, 0.018, 0.60, 0.66, glass, -0.70, 3.60, z);
   named(cyl(g, 0.205, 0.205, 0.25, M.steelDark, -0.64, 3.60, 0, 'x'), 'feedCollar');
   named(torus(g, 0.21, 0.028, frame, -0.75, 3.60, 0, 'x'), 'feedCollarRim');
@@ -2209,290 +2212,481 @@ function xray(on) {
   }));
 }
 
-/* =====================================================================
-   羽绒流 V2 · 分区物理仿真（4500 粒子）
-   技术参考：mapbox/webgl-wind 的速度场平流思想 + three.quarks 的粒子生命周期状态机，
-   针对设备内部工艺行为自研分区半解析物理：
-   0 软管风送  1 水洗机滚筒翻滚(提升-抛落)  2 架空管  3 PSL离心螺旋
-   4 管路  5 烘干机翻滚+热气浮升+轴向推进  6 高位管  7 冷却箱旋风沉降
-   8 风选进料管；末道四箱风选使用独立受力积分
+/* ================= 全流程羽毛 V3：单池、固定步长、连续交接 =================
+   借鉴 three.quarks 的粒子池/生命周期/合批，以及 webgl-wind 的速度场平流。
+   设备物理是本模型的原理示意；不采用风场示例的随机丢弃或边界重播。
+   每个 id 的类别、干质量、种子、颜色和尺寸贯穿全部区域，末端收集后才回收。
+   源码参考：
+   https://github.com/Alchemist0823/three.quarks/blob/master/packages/three.quarks/src/ParticleSystem.ts
+   https://github.com/mapbox/webgl-wind/blob/master/src/shaders/update.frag.glsl
+   https://github.com/dli/flow/blob/master/flow.js
    ===================================================================== */
-const FLOW_N = 4500;
-const ZDUR = [2.2, 6.0, 2.0, 2.6, 1.6, 7.0, 2.2, 3.2, 1.8];   // 各区停留秒数
-const mkC = (pts) => new THREE.CatmullRomCurve3(
-  pts.map(p => new THREE.Vector3(p[0], p[1], p[2])), false, 'catmullrom', 0.15);
-const hoseC = pipeCurves.feedHose;
-const wpC = pipeCurves.washerToPsl;
-const pdC = pipeCurves.pslToDryer;
-const dcC = pipeCurves.dryerToCooler;
-const csC = pipeCurves.coolerToSorter;
-const PIPE_C = [hoseC, null, wpC, null, pdC, null, dcC, null, csC];
-
-const fPos = new Float32Array(FLOW_N * 3), fCol = new Float32Array(FLOW_N * 3), fSize = new Float32Array(FLOW_N);
-const fZone = new Uint8Array(FLOW_N), fMode = new Uint8Array(FLOW_N);
-const fT = new Float32Array(FLOW_N), fDur = new Float32Array(FLOW_N), fA = new Float32Array(FLOW_N);
-const fSeed = new Float32Array(FLOW_N * 3);
-function enterZone(i, z) {
-  fZone[i] = z; fT[i] = 0; fDur[i] = ZDUR[z] * (0.85 + Math.random() * 0.3);
-  fMode[i] = 0;
-  fA[i] = (z === 3 || z === 7) ? Math.random() * 6.283 : 0;      // 旋转区随机初相
-}
-for (let i = 0; i < FLOW_N; i++) {                                // 初始化为稳态流
-  fSeed[i * 3] = Math.random(); fSeed[i * 3 + 1] = Math.random(); fSeed[i * 3 + 2] = Math.random();
-  fSize[i] = 0.7 + Math.random() * 1.2;
-  let r = Math.random() * ZDUR.reduce((a, b) => a + b), z = 0;
-  while (r > ZDUR[z]) { r -= ZDUR[z]; z++; }
-  enterZone(i, z); fT[i] = Math.random() * fDur[i];
-}
-const flowGeo = new THREE.BufferGeometry();
-flowGeo.setAttribute('position', new THREE.BufferAttribute(fPos, 3));
-flowGeo.setAttribute('aColor', new THREE.BufferAttribute(fCol, 3));
-flowGeo.setAttribute('aSize', new THREE.BufferAttribute(fSize, 1));
-const flow = new THREE.Points(flowGeo, new THREE.ShaderMaterial({
-  transparent: true, depthWrite: false,
-  vertexShader: `
-    attribute float aSize; attribute vec3 aColor; varying vec3 vColor;
-    void main() {
-      vColor = aColor;
-      vec4 mv = modelViewMatrix * vec4(position, 1.0);
-      gl_PointSize = max(aSize * (180.0 / -mv.z), 1.0);
-      gl_Position = projectionMatrix * mv;
-    }`,
-  fragmentShader: `
-    varying vec3 vColor;
-    void main() {
-      float d = length(gl_PointCoord - 0.5);
-      float a = smoothstep(0.5, 0.12, d);
-      gl_FragColor = vec4(vColor, a * 0.88);
-    }`
-}));
-flow.visible = false; flow.renderOrder = 5; flow.frustumCulled = false; scene.add(flow);
-
-function stepFlow(dt, time) {
-  for (let i = 0; i < FLOW_N; i++) {
-    fT[i] += dt;
-    if (fT[i] >= fDur[i]) enterZone(i, (fZone[i] + 1) % ZDUR.length);
-    const p = fT[i] / fDur[i], k = i * 3,
-          s0 = fSeed[k], s1 = fSeed[k + 1], s2 = fSeed[k + 2];
-    let x = 0, y = 0, z = 0, cr = 1, cg = 1, cb = 1;
-    switch (fZone[i]) {
-      case 0: {                                                    // 软管风送（速度场平流）
-        const q = hoseC.getPointAt(p);
-        x = q.x + Math.sin(time * 7 + s0 * 9) * 0.05;
-        y = q.y + Math.sin(time * 6 + s1 * 9) * 0.05;
-        z = q.z + Math.cos(time * 8 + s2 * 9) * 0.05;
-        cr = 0.82; cg = 0.80; cb = 0.75;
-        if (p > 0.75) { const u = (p - 0.75) / 0.25; cr -= 0.27 * u; cg -= 0.05 * u; cb += 0.17 * u; }
-        break;
-      }
-      case 1: {                                                    // 水洗机滚筒：筒壁提升→抛落
-        const cx = -10.5, cy = 1.95, rIn = 0.3 + s0 * 0.65;
-        x = cx + (s1 - 0.5) * 2.7;
-        if (fMode[i] === 0) {
-          fA[i] += (1.1 + s2 * 0.5) * dt;
-          const th = fA[i];
-          y = cy - rIn * Math.cos(th); z = rIn * Math.sin(th);
-          if (th > 1.5 + s2 * 0.8) { fMode[i] = 1; fA[i] = 0; }    // 到达抛落角
-        } else {
-          fA[i] -= 6.0 * dt; y = fPos[k + 1] + fA[i] * dt; z = fPos[k + 2];
-          if (y < cy - rIn * 0.85) { fMode[i] = 0; fA[i] = 0; }    // 落回筒底再被提升
-        }
-        /* 硬约束：绝不越出滚筒内壁（筒 r1.15、长 ±1.6、中心 y1.95） */
-        y = Math.max(y, 0.92);
-        x = Math.max(-11.9, Math.min(-9.1, x));
-        z = Math.max(-1.05, Math.min(1.05, z));
-        cr = 0.55; cg = 0.75; cb = 0.92;                           // 湿绒蓝
-        break;
-      }
-      case 2: case 4: case 6: case 8: {                            // 管路风送
-        const q = PIPE_C[fZone[i]].getPointAt(p);
-        x = q.x + Math.sin(time * 6 + s0 * 9) * 0.045;
-        y = q.y + Math.sin(time * 5 + s1 * 9) * 0.045;
-        z = q.z + Math.cos(time * 7 + s2 * 9) * 0.045;
-        if (fZone[i] === 2) { cr = 0.55; cg = 0.75; cb = 0.92; }
-        else if (fZone[i] === 4) { const u = p * 0.4; cr = 0.55 + 0.45 * u; cg = 0.75 + 0.18 * u; cb = 0.92 - 0.17 * u; }
-        else if (fZone[i] === 6) { const u = 0.4 + p * 0.6; cr = 1.0; cg = 0.93 - 0.0 * u + 0.05 * u; cb = 0.75 + 0.25 * u; }
-        else { cr = 0.97; cg = 0.97; cb = 1.0; }
-        break;
-      }
-      case 3: {                                                    // PSL 离心：高速贴壁螺旋下行
-        fA[i] += (5.0 + s0 * 1.5) * dt;
-        const r = 0.22 + 0.34 * p, th = fA[i];
-        x = -2 + r * Math.cos(th); z = r * Math.sin(th);
-        y = 2.45 - 1.0 * p + Math.sin(time * 8 + i) * 0.02;
-        cr = 0.55; cg = 0.75; cb = 0.92;
-        break;
-      }
-      case 5: {                                                    // 烘干机：翻滚+热气浮升+轴向推进
-        const cy = 2.15, rIn = 0.45 + s0 * 0.72;
-        x = 1.9 + p * 5.3;                                         // 由进口端推向出口端
-        if (fMode[i] === 0) {
-          fA[i] += (0.9 + s2 * 0.4) * dt;
-          const th = fA[i];
-          y = cy - rIn * Math.cos(th); z = rIn * Math.sin(th);
-          if (th > 1.4 + s2 * 0.8) { fMode[i] = 1; fA[i] = 0; }
-        } else {                                                   // 热风中的缓降+飘摆
-          fA[i] -= 2.8 * dt;
-          y = fPos[k + 1] + fA[i] * dt;
-          z = fPos[k + 2] + Math.sin(time * 3 + i) * 0.006;
-          if (y < cy - rIn * 0.85) { fMode[i] = 0; fA[i] = 0; }
-        }
-        /* 硬约束：绝不越出烘干滚筒内壁（筒 r1.4、x 1.5..7.5） */
-        y = Math.max(y, 0.95);
-        x = Math.max(1.7, Math.min(7.3, x));
-        z = Math.max(-1.3, Math.min(1.3, z));
-        cr = 0.55 + 0.45 * p; cg = 0.75 + 0.18 * p; cb = 0.92 - 0.17 * p;  // 渐变暖白
-        break;
-      }
-      case 7: {                                                    // 冷却箱：旋风螺旋沉降
-        fA[i] += (2.2 + s0 * 1.2) * dt;
-        const r = 0.85 - 0.58 * p, th = fA[i];
-        x = 10.8 + r * Math.cos(th); z = r * Math.sin(th);
-        y = 4.3 - 3.1 * p;
-        cr = 0.97; cg = 0.97; cb = 1.0;
-        break;
-      }
-
-    }
-    fPos[k] = x; fPos[k + 1] = y; fPos[k + 2] = z;
-    fCol[k] = cr; fCol[k + 1] = cg; fCol[k + 2] = cb;
-  }
-  flowGeo.attributes.position.needsUpdate = true;
-  flowGeo.attributes.aColor.needsUpdate = true;
-}
-
-/* ================= 四个直立箱：沿风向串联分选 ================= */
-// 相对质量与风场仅用于原理示意；在隔板上部通过的羽毛才会进入下一箱。
+const FLOW_N = 4500, FLOW_STEP = 1 / 120;
 const SORT_CLASSES = [
   { name: '重毛片', mass: 1.00, drag: 4.3, color: 0xd89b5d, width: 0.72, length: 1.20 },
   { name: '中重毛片', mass: 0.54, drag: 4.3, color: 0x94a3b8, width: 0.87, length: 1.04 },
   { name: '轻羽毛', mass: 0.33, drag: 4.3, color: 0x53c6d9, width: 1.02, length: 0.88 },
   { name: '轻质绒朵', mass: 0.165, drag: 4.3, color: 0xa5e6d0, width: 1.32, length: 0.66 }
 ];
-const SORT_N = 420, SORT_STEP = 1 / 120;
-const sorterState = { wind: 1, time: 0, carry: 0, collected: [0, 0, 0, 0], total: 0 };
-const sorterParticles = [];
+const flowState = { time: 0, carry: 0, wind: 1, collected: [0, 0, 0, 0], total: 0, cycles: 0 };
+const sorterState = flowState;
+const flowParticles = [];
+const fPos = new Float32Array(FLOW_N * 3), fRenderPos = new Float32Array(FLOW_N * 3);
+const fCol = new Float32Array(FLOW_N * 3), fScale = new Float32Array(FLOW_N * 3);
+const fQuat = new Float32Array(FLOW_N * 4), fAlpha = new Float32Array(FLOW_N);
+const fZone = new Uint8Array(FLOW_N);
+const flowUp = new THREE.Vector3(0, 1, 0), flowTmpV = new THREE.Vector3(), flowTmpQ = new THREE.Quaternion(), flowRollQ = new THREE.Quaternion();
+const flowEuler = new THREE.Euler(), flowRotationMatrix = new THREE.Matrix4();
+const FLOW_OWNER = [6, 1, 1, 2, 2, 3, 3, 4, 4, 5];
+const flowOwners = FLOW_OWNER.map(no => MODULES.find(m => m.no === no));
+const flow = new THREE.Group(); flow.name = '全流程显示状态'; flow.visible = false;
+
+/* One persistent feather travels through all nine process regions.
+   Build the field once; stepping only reads scalar data and updates the same object. */
+const FLOW_DUR = [2.2, 6.0, 2.0, 3.2, 1.6, 7.0, 2.2, 5.5, 1.8];
+const FLOW_ROUTE_STEPS = 1024;
+const FLOW_ROUTES = {};
+const FLOW_PIPE_KEYS = {0:'feedHose', 2:'washerToPsl', 4:'pslToDryer', 6:'dryerToCooler', 8:'coolerToSorter'};
+for (const key in FLOW_PIPE_KEYS) {
+  const zone = Number(key), curve = pipeCurves[FLOW_PIPE_KEYS[key]], data = new Float64Array((FLOW_ROUTE_STEPS + 1) * 12);
+  let nx = 0, ny = 0, nz = 0;
+  for (let j = 0; j <= FLOW_ROUTE_STEPS; j++) {
+    const u = j / FLOW_ROUTE_STEPS, c = curve.getPointAt(u), t = curve.getTangentAt(u).normalize(), k = j * 12;
+    if (j === 0) {
+      if (Math.abs(t.y) < .8) { nx = -t.z; ny = 0; nz = t.x; }
+      else { nx = 0; ny = t.z; nz = -t.y; }
+    } else {
+      const projection = nx * t.x + ny * t.y + nz * t.z;
+      nx -= projection * t.x; ny -= projection * t.y; nz -= projection * t.z;
+    }
+    const nlen = Math.hypot(nx, ny, nz) || 1; nx /= nlen; ny /= nlen; nz /= nlen;
+    data[k] = c.x; data[k + 1] = c.y; data[k + 2] = c.z;
+    data[k + 3] = t.x; data[k + 4] = t.y; data[k + 5] = t.z;
+    data[k + 6] = nx; data[k + 7] = ny; data[k + 8] = nz;
+    data[k + 9] = t.y * nz - t.z * ny;
+    data[k + 10] = t.z * nx - t.x * nz;
+    data[k + 11] = t.x * ny - t.y * nx;
+  }
+  FLOW_ROUTES[zone] = {data, length:curve.getLength(), key:FLOW_PIPE_KEYS[key]};
+}
+function flowClamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+function sampleFlowRoute(p, u) {
+  u = flowClamp(u, 0, 1);
+  const route = FLOW_ROUTES[p.zone], data = route.data;
+  const q = u * FLOW_ROUTE_STEPS, j = Math.min(FLOW_ROUTE_STEPS - 1, Math.floor(q)), a = q - j;
+  const k = j * 12, n = k + 12;
+  const cx = data[k] + (data[n] - data[k]) * a;
+  const cy = data[k + 1] + (data[n + 1] - data[k + 1]) * a;
+  const cz = data[k + 2] + (data[n + 2] - data[k + 2]) * a;
+  let tx = data[k + 3] + (data[n + 3] - data[k + 3]) * a;
+  let ty = data[k + 4] + (data[n + 4] - data[k + 4]) * a;
+  let tz = data[k + 5] + (data[n + 5] - data[k + 5]) * a;
+  const tlen = Math.hypot(tx, ty, tz) || 1; tx /= tlen; ty /= tlen; tz /= tlen;
+  const radius = .006 * (.6 + .4 * p.seed1) * Math.sin(Math.PI * u);
+  const angle = 6.283185307179586 * p.seed0 + u * 9.42477796076938;
+  const ca = Math.cos(angle) * radius, sa = Math.sin(angle) * radius;
+  p.x = cx + (data[k + 6] + (data[n + 6] - data[k + 6]) * a) * ca + (data[k + 9] + (data[n + 9] - data[k + 9]) * a) * sa;
+  p.y = cy + (data[k + 7] + (data[n + 7] - data[k + 7]) * a) * ca + (data[k + 10] + (data[n + 10] - data[k + 10]) * a) * sa;
+  p.z = cz + (data[k + 8] + (data[n + 8] - data[k + 8]) * a) * ca + (data[k + 11] + (data[n + 11] - data[k + 11]) * a) * sa;
+  p.tx = tx; p.ty = ty; p.tz = tz;
+  const speed = route.length / p.zoneDuration;
+  p.vx = tx * speed; p.vy = ty * speed; p.vz = tz * speed;
+}
+function flowSnapshot(p) {
+  p.entryX = p.x; p.entryY = p.y; p.entryZ = p.z;
+  p.entryVx = p.vx || 0; p.entryVy = p.vy || 0; p.entryVz = p.vz || 0;
+}
+function flowProjectControl(p, x, y, z) {
+  if (p.zone === 1 || p.zone === 5) {
+    const cy = p.zone === 1 ? 1.95 : 2.15, r = p.zone === 1 ? 1.10 : 1.35;
+    const dy = y - cy, radial = Math.hypot(dy, z);
+    if (radial > r) { const scale = r / radial; y = cy + dy * scale; z *= scale; }
+    x = flowClamp(x, p.zone === 1 ? -11.94 : 1.6, p.zone === 1 ? -9.06 : 7.25);
+  } else if (p.zone === 3) {
+    const dx = x + 2, r = Math.hypot(dx, z);
+    if (r > .65) { x = -2 + dx * .65 / r; z *= .65 / r; }
+    y = flowClamp(y, .8, 3.10);
+  } else if (p.zone === 7) {
+    x = flowClamp(x, 9.72, 11.88); y = flowClamp(y, .22, 4.50); z = flowClamp(z, -1.02, 1.02);
+  }
+  p.cp1x = x; p.cp1y = y; p.cp1z = z;
+}
+function flowBeginCurve(p, mode, age, duration, ex, ey, ez, tx, ty, tz, approach) {
+  p.mode = mode; p.modeStartAge = age; p.modeDuration = duration;
+  p.cp0x = p.x; p.cp0y = p.y; p.cp0z = p.z;
+  flowProjectControl(p, p.x + (p.vx || 0) * duration / 3, p.y + (p.vy || 0) * duration / 3, p.z + (p.vz || 0) * duration / 3);
+  p.cp2x = ex - tx * approach; p.cp2y = ey - ty * approach; p.cp2z = ez - tz * approach;
+  p.cp3x = ex; p.cp3y = ey; p.cp3z = ez;
+}
+function flowSampleCurve(p, age) {
+  const u = flowClamp((age - p.modeStartAge) / p.modeDuration, 0, 1), v = 1 - u;
+  const a = v * v * v, b = 3 * v * v * u, c = 3 * v * u * u, d = u * u * u;
+  p.x = a * p.cp0x + b * p.cp1x + c * p.cp2x + d * p.cp3x;
+  p.y = a * p.cp0y + b * p.cp1y + c * p.cp2y + d * p.cp3y;
+  p.z = a * p.cp0z + b * p.cp1z + c * p.cp2z + d * p.cp3z;
+  const s = 3 / p.modeDuration;
+  p.vx = s * (v * v * (p.cp1x - p.cp0x) + 2 * v * u * (p.cp2x - p.cp1x) + u * u * (p.cp3x - p.cp2x));
+  p.vy = s * (v * v * (p.cp1y - p.cp0y) + 2 * v * u * (p.cp2y - p.cp1y) + u * u * (p.cp3y - p.cp2y));
+  p.vz = s * (v * v * (p.cp1z - p.cp0z) + 2 * v * u * (p.cp2z - p.cp1z) + u * u * (p.cp3z - p.cp2z));
+  const speed = Math.hypot(p.vx, p.vy, p.vz);
+  if (speed > 1e-7) { p.tx = p.vx / speed; p.ty = p.vy / speed; p.tz = p.vz / speed; }
+}
+function flowStartOutlet(p, age) {
+  const next = FLOW_ROUTES[p.zone + 1].data;
+  flowBeginCurve(p, 3, age, p.zoneDuration - age, next[0], next[1], next[2], next[3], next[4], next[5], p.zone === 7 ? .30 : .18);
+}
+function enterFlowZone(p, zone) {
+  if (zone === 9) { p.zone = 9; p.zoneAge = 0; enterSorterParticle(p); return; }
+  flowSnapshot(p);
+  p.zone = zone; p.zoneAge = 0; p.zoneDuration = FLOW_DUR[zone] * (.96 + .08 * p.seed2);
+  p.mode = 0; p.angle = 0;
+  if (FLOW_ROUTES[zone]) return;
+  if (zone === 1 || zone === 5) {
+    const washing = zone === 1;
+    p.drumY = washing ? 1.95 : 2.15;
+    p.drumRadius = washing ? .87 + .06 * p.seed0 : 1.03 + .12 * p.seed0;
+    p.drumBound = washing ? .95 : 1.20;
+    p.liftOmega = washing ? .78 + .12 * p.seed1 : .94 + .16 * p.seed1;
+    p.releaseAngle = 2.18 + .12 * p.seed2;
+    p.workStartAge = p.zoneDuration * .10; p.workEndAge = p.zoneDuration * (washing ? .80 : .82);
+    p.workStartX = washing ? -10.9 : 1.86; p.workEndX = washing ? -9.60 : 6.92;
+    flowBeginCurve(p, 0, 0, p.workStartAge, p.workStartX, p.drumY - p.drumRadius, 0, 0, 0, 1, .12);
+  } else if (zone === 3) {
+    p.workStartAge = p.zoneDuration * .12; p.workEndAge = p.zoneDuration * .78;
+    p.spinRadius = .58 + .03 * p.seed0;
+    p.spinOmega = 5.0 + 1.3 * p.seed1;
+    flowBeginCurve(p, 0, 0, p.workStartAge, -1.90, 2.78, 0, 0, 0, 1, .10);
+  } else if (zone === 7) {
+    p.workStartAge = p.zoneDuration * .11; p.swirlEndAge = p.zoneDuration * .62;
+    p.settleEndAge = p.zoneDuration * .72; p.workEndAge = p.zoneDuration * .78;
+    p.swirlRadius = .82; p.heapY = .25 + .12 * p.seed0;
+    flowBeginCurve(p, 0, 0, p.workStartAge, 11.62, 4.12, 0, 0, 0, 1, .15);
+  }
+}
+function flowDrumContact(p) {
+  const dy = p.y - p.drumY, radial = Math.hypot(dy, p.z);
+  if (radial <= p.drumBound) return;
+  const ny = dy / radial, nz = p.z / radial;
+  p.y = p.drumY + ny * p.drumBound; p.z = nz * p.drumBound;
+  const outward = p.vy * ny + p.vz * nz;
+  if (outward > 0) { p.vy -= outward * ny; p.vz -= outward * nz; }
+}
+function flowDrumWork(p, dt, age) {
+  let left = dt, elapsed = 0, guard = 0;
+  while (left > 1e-10 && guard++ < 8) {
+    if (p.mode === 1) {
+      const untilRelease = Math.max(0, (p.releaseAngle - p.angle) / p.liftOmega);
+      const h = Math.min(left, untilRelease);
+      p.angle += p.liftOmega * h;
+      const ca = Math.cos(p.angle), sa = Math.sin(p.angle);
+      p.y = p.drumY - p.drumRadius * ca; p.z = p.drumRadius * sa;
+      p.vy = p.drumRadius * p.liftOmega * sa; p.vz = p.drumRadius * p.liftOmega * ca;
+      elapsed += h; left -= h;
+      if (untilRelease <= h + 1e-10) { p.mode = 2; p.fallAge = 0; }
+      else break;
+    } else {
+      const h = left, lambda = p.zone === 1 ? 1.8 : 1.35;
+      const gravity = p.zone === 1 ? 3.2 : 3.5;
+      const terminal = -gravity / lambda, decay = Math.exp(-lambda * h), f = (1 - decay) / lambda;
+      p.y += terminal * h + (p.vy - terminal) * f;
+      p.z += p.vz * f;
+      p.vy = terminal + (p.vy - terminal) * decay; p.vz *= decay;
+      p.fallAge += h; elapsed += h; left = 0;
+      flowDrumContact(p);
+      const dy = p.y - p.drumY;
+      if (dy < -.30 && p.vy <= 0 && p.fallAge > .12 && Math.hypot(dy, p.z) > p.drumRadius - .04) {
+        // Attach where the feather actually contacted the lower drum wall.
+        p.drumRadius = Math.min(p.drumBound, Math.hypot(dy, p.z));
+        p.angle = Math.atan2(p.z, -dy);
+        if (p.angle < 0) p.angle += Math.PI * 2;
+        if (p.angle > p.releaseAngle) p.angle -= Math.PI * 2;
+        p.mode = 1;
+      }
+    }
+  }
+  const u = flowClamp((age + dt - p.workStartAge) / (p.workEndAge - p.workStartAge), 0, 1);
+  p.x = p.workStartX + (p.workEndX - p.workStartX) * u;
+  p.vx = (p.workEndX - p.workStartX) / (p.workEndAge - p.workStartAge);
+  const speed = Math.hypot(p.vx, p.vy, p.vz);
+  p.tx = p.vx / speed; p.ty = p.vy / speed; p.tz = p.vz / speed;
+}
+function advanceFlowDevice(p, dt) {
+  let age = p.zoneAge, left = dt, guard = 0;
+  while (left > 1e-10 && guard++ < 12) {
+    if (p.mode === 0) {
+      const h = Math.min(left, p.workStartAge - age);
+      flowSampleCurve(p, age + h); age += h; left -= h;
+      if (age >= p.workStartAge - 1e-10) { p.mode = 1; p.angle = 0; }
+      continue;
+    }
+    if (p.mode === 3) { flowSampleCurve(p, age + left); age += left; left = 0; break; }
+    if (p.zone === 1 || p.zone === 5) {
+      const h = Math.min(left, p.workEndAge - age);
+      flowDrumWork(p, h, age); age += h; left -= h;
+      if (age >= p.workEndAge - 1e-10) flowStartOutlet(p, age);
+    } else if (p.zone === 3) {
+      const h = Math.min(left, p.workEndAge - age), span = p.workEndAge - p.workStartAge;
+      const u = flowClamp((age + h - p.workStartAge) / span, 0, 1);
+      p.angle += p.spinOmega * h;
+      const r = .10 + (p.spinRadius - .10) * u, dr = (p.spinRadius - .10) / span;
+      const ca = Math.cos(p.angle), sa = Math.sin(p.angle);
+      p.x = -2 + r * ca; p.z = r * sa; p.y = 2.78 - 1.38 * u;
+      p.vx = dr * ca - r * p.spinOmega * sa; p.vz = dr * sa + r * p.spinOmega * ca; p.vy = -1.38 / span;
+      const speed = Math.hypot(p.vx, p.vy, p.vz); p.tx = p.vx / speed; p.ty = p.vy / speed; p.tz = p.vz / speed;
+      age += h; left -= h;
+      if (age >= p.workEndAge - 1e-10) flowStartOutlet(p, age);
+    } else if (p.zone === 7) {
+      if (p.mode === 1) {
+        const h = Math.min(left, p.swirlEndAge - age), span = p.swirlEndAge - p.workStartAge;
+        const u = flowClamp((age + h - p.workStartAge) / span, 0, 1), omega = (2.4 + .6 * p.seed1) * (1 - .55 * u);
+        p.angle += omega * h;
+        const r = .82 - .54 * u, dr = -.54 / span, ca = Math.cos(p.angle), sa = Math.sin(p.angle);
+        p.x = 10.8 + r * ca; p.z = r * sa; p.y = 4.12 - 3.52 * u;
+        p.vx = dr * ca - r * omega * sa; p.vz = dr * sa + r * omega * ca; p.vy = -3.52 / span;
+        age += h; left -= h;
+        if (age >= p.swirlEndAge - 1e-10) {
+          flowBeginCurve(p, 4, age, p.settleEndAge - age, p.x, p.heapY, p.z, 0, 0, 0, 0);
+        }
+      } else if (p.mode === 4) {
+        const h = Math.min(left, p.settleEndAge - age);
+        flowSampleCurve(p, age + h); age += h; left -= h;
+        if (age >= p.settleEndAge - 1e-10) { p.mode = 5; p.vx = 0; p.vy = 0; p.vz = 0; }
+      } else {
+        const h = Math.min(left, p.workEndAge - age); age += h; left -= h;
+        if (age >= p.workEndAge - 1e-10) flowStartOutlet(p, age);
+      }
+    }
+  }
+}
+function advanceProcessParticle(p, dt, time) {
+  let left = dt, consumed = 0, guard = 0;
+  p.sortCarryDt = 0;
+  while (left > 1e-10 && p.zone < 9 && guard++ < 20) {
+    const h = Math.min(left, Math.max(0, p.zoneDuration - p.zoneAge));
+    if (FLOW_ROUTES[p.zone]) sampleFlowRoute(p, (p.zoneAge + h) / p.zoneDuration);
+    else advanceFlowDevice(p, h);
+    p.zoneAge += h; left -= h; consumed += h;
+    if (p.zoneAge >= p.zoneDuration - 1e-9) {
+      if (FLOW_ROUTES[p.zone]) sampleFlowRoute(p, 1);
+      else flowSampleCurve(p, p.zoneDuration);
+      enterFlowZone(p, p.zone + 1);
+      if (p.zone === 9) { p.sortCarryDt = left; p.sortEnterTime = time + consumed; break; }
+    }
+  }
+}
+
+
+// 一个羽毛片几何和一条实例渲染管线覆盖全部设备，羽轴/羽枝由片元着色器绘制。
 const featherShape = new THREE.Shape();
 featherShape.moveTo(0, -0.16);
 featherShape.bezierCurveTo(-0.075, -0.10, -0.10, 0.005, -0.042, 0.11);
 featherShape.quadraticCurveTo(-0.014, 0.15, 0, 0.19);
 featherShape.quadraticCurveTo(0.10, 0.075, 0.064, -0.018);
 featherShape.quadraticCurveTo(0.040, -0.105, 0, -0.16);
-const sortFeathers = new THREE.InstancedMesh(new THREE.ShapeGeometry(featherShape, 8),
-  pbr({ color: 0xffffff, roughness: 0.8, metalness: 0, side: THREE.DoubleSide }), SORT_N);
-sortFeathers.name = '风选_羽毛片';
-sortFeathers.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
-sortFeathers.frustumCulled = false;
-sorterGroup.add(sortFeathers);
-const sortShafts = new THREE.InstancedMesh(new THREE.BoxGeometry(0.006, 0.34, 0.004),
-  pbr({ color: 0xf7fbff, roughness: 0.85, metalness: 0 }), SORT_N);
-sortShafts.name = '风选_羽轴'; sortShafts.frustumCulled = false;
-sortShafts.instanceMatrix.setUsage(THREE.DynamicDrawUsage); sorterGroup.add(sortShafts);
-const barbVertices = [];
-for (let j = 0; j < 10; j++) for (const side of [-1, 1]) {
-  const y = -0.12 + j * 0.025, w = 0.056 * Math.sin((j + 1) * Math.PI / 12);
-  const ax = 0, ay = y, bx = side * w, by = y + 0.044, t = 0.0018;
-  barbVertices.push(ax, ay - t, 0.005, bx, by - t, 0.005, bx, by + t, 0.005,
-    ax, ay - t, 0.005, bx, by + t, 0.005, ax, ay + t, 0.005);
+const featherBase = new THREE.ShapeGeometry(featherShape, 4);
+featherBase.computeBoundingBox();
+const featherLocalBounds = featherBase.boundingBox.clone();
+const flowGeo = new THREE.InstancedBufferGeometry();
+flowGeo.index = featherBase.index;
+flowGeo.setAttribute('position', featherBase.attributes.position);
+flowGeo.setAttribute('aPosition', new THREE.InstancedBufferAttribute(fRenderPos, 3).setUsage(THREE.DynamicDrawUsage));
+flowGeo.setAttribute('aQuaternion', new THREE.InstancedBufferAttribute(fQuat, 4).setUsage(THREE.DynamicDrawUsage));
+flowGeo.setAttribute('aScale', new THREE.InstancedBufferAttribute(fScale, 3));
+flowGeo.setAttribute('aColor', new THREE.InstancedBufferAttribute(fCol, 3));
+flowGeo.setAttribute('aAlpha', new THREE.InstancedBufferAttribute(fAlpha, 1).setUsage(THREE.DynamicDrawUsage));
+flowGeo.instanceCount = FLOW_N;
+const featherMaterial = new THREE.ShaderMaterial({
+  side: THREE.DoubleSide, transparent: true, depthWrite: false,
+  vertexShader: `
+    attribute vec3 aPosition; attribute vec4 aQuaternion; attribute vec3 aScale;
+    attribute vec3 aColor; attribute float aAlpha;
+    varying vec3 vColor; varying vec2 vLeaf; varying float vAlpha; varying float vLight;
+    vec3 rotateQ(vec3 v, vec4 q) { return v + 2.0 * cross(q.xyz, cross(q.xyz, v) + q.w * v); }
+    void main() {
+      vec3 world = aPosition + rotateQ(position * aScale, aQuaternion);
+      vec3 n = rotateQ(vec3(0.0, 0.0, 1.0), aQuaternion);
+      vColor = aColor; vLeaf = position.xy; vAlpha = aAlpha;
+      vLight = 0.66 + 0.34 * abs(dot(n, normalize(vec3(-0.3, 0.7, 0.6))));
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(world, 1.0);
+    }`,
+  fragmentShader: `
+    varying vec3 vColor; varying vec2 vLeaf; varying float vAlpha; varying float vLight;
+    void main() {
+      if (vAlpha < 0.003) discard;
+      float shaft = 1.0 - smoothstep(0.002, 0.006, abs(vLeaf.x));
+      float barb = pow(max(0.0, cos((vLeaf.y - abs(vLeaf.x) * 0.72) * 205.0)), 12.0);
+      vec3 c = mix(vColor, vec3(0.95, 0.98, 1.0), min(0.8, shaft * 0.7 + barb * 0.28));
+      gl_FragColor = vec4(c * vLight, vAlpha);
+      #include <tonemapping_fragment>
+      #include <encodings_fragment>
+    }`
+});
+const featherMesh = new THREE.Mesh(flowGeo, featherMaterial);
+featherMesh.name = '4500羽毛_全程一致实例'; featherMesh.frustumCulled = false; featherMesh.renderOrder = 5;
+scene.add(featherMesh);
+function particleUnitScale(p) { return 0.60 + (p.id % 5) * 0.055; }
+function sortFloorContactY(p, q) {
+  const kind = SORT_CLASSES[p.kind], s = particleUnitScale(p);
+  const lo = featherLocalBounds.min, hi = featherLocalBounds.max;
+  const m = flowRotationMatrix.makeRotationFromQuaternion(q).elements;
+  const lower = m[1] * (m[1] >= 0 ? lo.x : hi.x) * s * kind.width
+    + m[5] * (m[5] >= 0 ? lo.y : hi.y) * s * kind.length;
+  return SORTER.bins[p.bin].floorY + 0.012 - lower;
 }
-const barbGeometry = new THREE.BufferGeometry();
-barbGeometry.setAttribute('position', new THREE.Float32BufferAttribute(barbVertices, 3));
-barbGeometry.computeVertexNormals();
-const sortBarbs = new THREE.InstancedMesh(barbGeometry,
-  pbr({ color: 0xf7fbff, roughness: 0.85, metalness: 0, side: THREE.DoubleSide }), SORT_N);
-sortBarbs.name = '风选_羽枝'; sortBarbs.frustumCulled = false;
-sortBarbs.instanceMatrix.setUsage(THREE.DynamicDrawUsage); sorterGroup.add(sortBarbs);
-const sortDummy = new THREE.Object3D();
-function resetSortParticle(p, delay = 0) {
-  p.kind = p.id % SORT_CLASSES.length;
-  const type = SORT_CLASSES[p.kind];
-  // 同类内部也存在质量差异，避免四条机械整齐的飞行轨道。
-  const variation = 0.985 + 0.03 * ((Math.sin(p.id * 13.17 + p.cycle * 1.73) + 1) / 2);
-  p.mass = type.mass * variation; p.drag = type.drag;
-  p.x = -0.52; p.y = 3.6; p.z = 0.065 * Math.sin(p.id * 3.1);
-  p.vx = 1.6; p.vy = 0.22; p.vz = 0; p.chamber = 0;
-  p.age = -delay; p.phase = 0; p.bin = -1; p.settle = 0; p.cycle++;
+function seed01(id, salt) {
+  const n = Math.sin((id + 1) * 12.9898 + salt * 78.233) * 43758.5453;
+  return n - Math.floor(n);
 }
-for (let i = 0; i < SORT_N; i++) {
-  const p = { id: i, cycle: 0 };
-  resetSortParticle(p, i * 0.045); sorterParticles.push(p);
-  sortFeathers.setColorAt(i, new THREE.Color(SORT_CLASSES[p.kind].color));
+function newFlowParticle(id) {
+  const kind = id % 4, type = SORT_CLASSES[kind];
+  const p = { id, kind, mass: type.mass * (0.985 + 0.03 * seed01(id, 7)), drag: type.drag,
+    seed0: seed01(id, 1), seed1: seed01(id, 2), seed2: seed01(id, 3), cycle: 0,
+    x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, tx: 0, ty: 1, tz: 0,
+    zone: 0, zoneAge: 0, phase: 0, wait: 0, settle: 0, lifeTime: 0,
+    q: new THREE.Quaternion(), landRotation: new THREE.Quaternion(), restRotation: new THREE.Quaternion() };
+  const c = new THREE.Color(type.color), k = id * 3;
+  fCol[k] = c.r; fCol[k + 1] = c.g; fCol[k + 2] = c.b;
+  const s = particleUnitScale(p); fScale[k] = s * type.width; fScale[k + 1] = s * type.length; fScale[k + 2] = s;
+  return p;
 }
-// 所有羽毛受到同一个向前、向上的风场；质量改变对气流的响应速度。
-// 参数保证这组示意原料在运行风量下始终向前上扬，无需钳制竖直速度。
-function sorterAirY(y, wind = sorterState.wind) { return 2.4 * wind; }
-function integrateSortParticle(p, dt, time) {
-  p.age += dt;
-  if (p.age < 0) return;
+function enterSorterParticle(p) {
+  // 不生成新羽毛：最后一根管道的同一对象、同一坐标直接进入分拣区。
+  orientProcessParticle(p, FLOW_STEP, p.lifeTime);
+  p.zone = 9; p.zoneAge = 0; p.phase = 0; p.chamber = 0; p.bin = -1;
+  p.captureTime = 0; p.fallTime = 0; p.settle = 0;
+  p.spin = (p.id % 2 ? 1 : -1) * (2.4 + 0.9 / Math.sqrt(p.mass));
+}
+function advanceSorterParticle(p, dt, time) {
+  p.zoneAge += dt;
   if (p.phase === 0) {
     const response = p.drag / p.mass, damping = Math.exp(-response * dt);
-    const ux = 4.83 * sorterState.wind, uy = sorterAirY(p.y);
+    const ux = 4.83 * flowState.wind, uy = 2.4 * flowState.wind;
     const uz = 0.18 * Math.sin(p.id * 1.71) - 0.25 * p.z;
     p.vx = ux + (p.vx - ux) * damping;
     p.vy = uy - 9.81 / response + (p.vy - uy + 9.81 / response) * damping;
     p.vz = uz + (p.vz - uz) * damping;
     p.x += p.vx * dt; p.y += p.vy * dt; p.z += p.vz * dt;
-    const chamber = SORTER.bins[p.chamber];
-    // 羽毛是否能越过本箱上部连通口，只由到达隔板时的真实高度决定。
-    if (p.x >= chamber.maxX - 0.18) {
-      if (p.chamber < 3 && p.y >= chamber.gateY + 0.18) {
-        p.chamber++;
-      } else {
-        p.bin = p.chamber; p.phase = 1;
-        p.x = chamber.maxX - 0.18; p.vx = 0; p.vy = 0; p.vz = 0;
+    const flutter = time * (3.2 + 0.32 / p.mass) + p.id * 1.71;
+    flowTmpQ.setFromEuler(flowEuler.set(0.42 * Math.sin(flutter * 0.71), 0.62 * Math.sin(flutter * 0.83),
+      0.32 * Math.sin(flutter) + Math.atan2(-p.vx, Math.abs(p.vy) + 0.5)));
+    p.q.slerp(flowTmpQ, 1 - Math.exp(-12 * dt));
+    const b = SORTER.bins[p.chamber], endX = SORTER.origin.x + b.maxX;
+    if (p.x >= endX - 0.18) {
+      if (p.chamber < 3 && p.y >= b.gateY + 0.18) p.chamber++;
+      else {
+        flowEuler.setFromQuaternion(p.q); p.rx = flowEuler.x; p.ry = flowEuler.y; p.rz = flowEuler.z;
+        p.bin = p.chamber; p.phase = 1; p.x = endX - 0.18; p.vx = p.vy = p.vz = 0;
+        p.captureX = p.x; p.captureZ = p.z; p.captureTime = 0;
+        p.dropX = SORTER.origin.x + b.centerX + 0.36 * Math.sin(p.id * 2.17 + p.cycle);
+        p.dropZ = 0.43 * Math.sin(p.id * 1.37 + p.cycle * 0.6);
       }
     }
   } else if (p.phase === 1) {
-    // 被本箱收料网截留：继续向前贴网，保持截留高度，不作自由落体。
-    const targetX = SORTER.bins[p.bin].maxX - 0.014;
-    p.x += (targetX - p.x) * (1 - Math.exp(-12 * dt));
-    if (targetX - p.x < 0.001) {
-      p.x = targetX; p.phase = 3;
-      sorterState.collected[p.bin]++; sorterState.total++;
+    p.captureTime += dt;
+    const t = THREE.MathUtils.smoothstep(p.captureTime, 0, 0.55);
+    p.x = THREE.MathUtils.lerp(p.captureX, p.dropX, t); p.z = THREE.MathUtils.lerp(p.captureZ, p.dropZ, t);
+    if (p.captureTime > 0.14) {
+      p.rx += p.spin * 0.12 * dt; p.ry += p.spin * 0.16 * dt; p.rz += p.spin * 0.08 * dt;
     }
-  } else {
+    p.q.setFromEuler(flowEuler.set(p.rx, p.ry, p.rz));
+    if (p.captureTime >= 0.55) { p.phase = 2; p.fallTime = 0; }
+  } else if (p.phase === 2) {
+    p.fallTime += dt;
+    const response = 4 + 1.5 / Math.sqrt(p.mass), terminal = -9.81 / response;
+    p.vy = terminal + (p.vy - terminal) * Math.exp(-response * dt); p.y += p.vy * dt;
+    p.x = p.dropX + 0.13 * (Math.sin(p.fallTime * 1.8 + p.id) - Math.sin(p.id));
+    p.z = p.dropZ + 0.10 * (Math.sin(p.fallTime * 2.1 + p.id * 0.7) - Math.sin(p.id * 0.7));
+    p.rx += p.spin * (0.65 + 0.12 * Math.sin(p.fallTime * 2.4)) * dt;
+    p.ry += p.spin * 0.90 * dt; p.rz += p.spin * 0.42 * dt;
+    p.q.setFromEuler(flowEuler.set(p.rx, p.ry, p.rz));
+    const floorY = sortFloorContactY(p, p.q);
+    if (p.y <= floorY) {
+      p.y = floorY; p.phase = 3; p.settle = 0; p.vx = p.vy = p.vz = 0;
+      p.landRotation.copy(p.q); p.restRotation.setFromEuler(flowEuler.set(-Math.PI / 2, 0, p.id * 1.73));
+      flowState.collected[p.bin]++; flowState.total++;
+    }
+  } else if (p.phase === 3) {
     p.settle += dt;
-    if (p.settle > 4 + (p.id % 6) * 0.4) resetSortParticle(p, 0.12 + (p.id % 5) * 0.08);
+    p.q.slerpQuaternions(p.landRotation, p.restRotation, 1 - Math.exp(-6 * p.settle));
+    p.y = sortFloorContactY(p, p.q);
+    if (p.settle > 4 + (p.id % 6) * 0.4) {
+      p.cycle++; flowState.cycles++;
+      enterFlowZone(p, 0); sampleFlowRoute(p, 0); p.wait = 0.15 + p.seed1 * 0.3;
+    }
   }
 }
+function orientProcessParticle(p, dt, time) {
+  if (p.zone === 7 && (p.mode === 4 || p.mode === 5)) {
+    flowTmpQ.setFromEuler(flowEuler.set(-Math.PI / 2, 0, p.seed1 * Math.PI * 2));
+    p.q.slerp(flowTmpQ, 1 - Math.exp(-8 * dt)); return;
+  }
+  const speed = Math.hypot(p.tx, p.ty, p.tz);
+  if (speed > 1e-7) flowTmpV.set(p.tx / speed, p.ty / speed, p.tz / speed); else flowTmpV.set(0, 1, 0);
+  flowTmpQ.setFromUnitVectors(flowUp, flowTmpV);
+  const spin = time * (1.3 + p.seed2) + p.seed1 * Math.PI * 2;
+  flowRollQ.setFromAxisAngle(flowUp, spin);
+  flowTmpQ.multiply(flowRollQ);
+  if (p.zone % 2 === 0) p.q.copy(flowTmpQ); // 管内长轴随局部切线，转动只绕流向，避免碰到管壁。
+  else p.q.slerp(flowTmpQ, 1 - Math.exp(-8 * dt));
+}
+function advanceFlowParticle(p, dt, time) {
+  if (p.wait > 0) { p.wait = Math.max(0, p.wait - dt); return; }
+  p.lifeTime += dt; time = p.lifeTime;
+  if (p.zone === 9) advanceSorterParticle(p, dt, time);
+  else {
+    advanceProcessParticle(p, dt, time);
+    if (p.zone === 9 && p.sortCarryDt > 0) { advanceSorterParticle(p, p.sortCarryDt, time); p.sortCarryDt = 0; }
+  }
+}
+function drawFlowParticles(dt = 0) {
+  for (const p of flowParticles) {
+    if (p.zone !== 9) orientProcessParticle(p, dt, p.lifeTime);
+    const k = p.id * 3, q = p.id * 4, owner = flowOwners[p.zone];
+    fPos[k] = p.x; fPos[k + 1] = p.y; fPos[k + 2] = p.z; fZone[p.id] = p.zone;
+    fRenderPos[k] = p.x; fRenderPos[k + 1] = p.y + (owner.group.position.y - owner.baseY); fRenderPos[k + 2] = p.z;
+    fQuat[q] = p.q.x; fQuat[q + 1] = p.q.y; fQuat[q + 2] = p.q.z; fQuat[q + 3] = p.q.w;
+    const visible = owner.group.visible && (p.zone === 9 || flow.visible);
+    const emit = p.zone === 0 ? THREE.MathUtils.smoothstep(p.zoneAge, 0, 0.3) : 1;
+    const fade = p.zone === 9 && p.phase === 3 ? 1 - THREE.MathUtils.smoothstep(p.settle, 3.5 + (p.id % 6) * 0.4, 4 + (p.id % 6) * 0.4) : 1;
+    fAlpha[p.id] = visible && p.wait <= 0 ? emit * fade * 0.96 : 0;
+  }
+  flowGeo.attributes.aPosition.needsUpdate = true;
+  flowGeo.attributes.aQuaternion.needsUpdate = true;
+  flowGeo.attributes.aAlpha.needsUpdate = true;
+}
+function stepFlow(dt) {
+  let advanced = 0;
+  flowState.carry += Math.min(dt, 0.1);
+  while (flowState.carry + 1e-10 >= FLOW_STEP) {
+    flowState.time += FLOW_STEP;
+    for (const p of flowParticles) advanceFlowParticle(p, FLOW_STEP, flowState.time);
+    flowState.carry -= FLOW_STEP;
+    advanced += FLOW_STEP;
+  }
+  drawFlowParticles(advanced);
+}
+function resetFlow(steady = false) {
+  flowState.time = 0; flowState.carry = 0; flowState.collected.fill(0); flowState.total = 0; flowState.cycles = 0;
+  const total = FLOW_DUR.reduce((a, b) => a + b, 0) + 10;
+  for (const p of flowParticles) {
+    p.cycle = 0; p.wait = 0; p.phase = 0; p.settle = 0; p.lifeTime = 0; p.q.identity();
+    enterFlowZone(p, 0); sampleFlowRoute(p, 0);
+    if (steady) {
+      let age = p.seed0 * total;
+      // 独立预热同一个对象，不在设备之间创建新对象；初屏即为连续生产稳态。
+      for (let t = FLOW_STEP; age > 1e-8; t += FLOW_STEP) {
+        const dt = Math.min(FLOW_STEP, age); advanceFlowParticle(p, dt, t); age -= dt;
+      }
+    } else p.wait = p.id * 0.009;
+  }
+  flowState.collected.fill(0); flowState.total = 0; flowState.cycles = 0;
+  drawFlowParticles(1);
+}
+function restartSorter() { resetFlow(false); }
+for (let id = 0; id < FLOW_N; id++) flowParticles.push(newFlowParticle(id));
+resetFlow(true);
+/* FULL_FLOW_END */
 
-function drawSorterParticles() {
-  for (const p of sorterParticles) {
-    const type = SORT_CLASSES[p.kind], flying = p.phase === 0;
-    sortDummy.position.set(p.x, p.y, p.z);
-    const flutter = sorterState.time * (3.2 + 0.32 / p.mass) + p.id * 1.71;
-    sortDummy.rotation.set(flying ? 0.42 * Math.sin(flutter * 0.71) : 0,
-      flying ? 0.62 * Math.sin(flutter * 0.83) : Math.PI / 2,
-      flying ? 0.32 * Math.sin(flutter) + Math.atan2(-p.vx, Math.abs(p.vy) + 0.5) : p.id * 0.7);
-    const visible = p.age >= 0 ? 0.60 + (p.id % 5) * 0.055 : 0;
-    sortDummy.scale.set(visible * type.width, visible * type.length, visible);
-    sortDummy.updateMatrix();
-    sortFeathers.setMatrixAt(p.id, sortDummy.matrix); sortShafts.setMatrixAt(p.id, sortDummy.matrix);
-    sortBarbs.setMatrixAt(p.id, sortDummy.matrix);
-  }
-  sortFeathers.instanceMatrix.needsUpdate = true; sortShafts.instanceMatrix.needsUpdate = true;
-  sortBarbs.instanceMatrix.needsUpdate = true;
-}
-function stepSorter(dt) {
-  sorterState.carry += Math.min(dt, 0.1);
-  while (sorterState.carry >= SORT_STEP) {
-    sorterState.time += SORT_STEP;
-    for (const p of sorterParticles) integrateSortParticle(p, SORT_STEP, sorterState.time);
-    sorterState.carry -= SORT_STEP;
-  }
-  drawSorterParticles();
-}
-function restartSorter() {
-  sorterState.time = 0; sorterState.carry = 0; sorterState.collected.fill(0); sorterState.total = 0;
-  sorterParticles.forEach((p, i) => resetSortParticle(p, i * 0.045));
-  drawSorterParticles();
-}
-// 预热后直接看到四箱顺风分选；“重新投料”从第一箱混合进料开始。
-for (let t = 0; t < 16; t += SORT_STEP) {
-  sorterState.time += SORT_STEP;
-  for (const p of sorterParticles) integrateSortParticle(p, SORT_STEP, sorterState.time);
-}
-drawSorterParticles();
 
 /* ================= UI ================= */
 const infoBox = document.getElementById('info');
@@ -2571,12 +2765,12 @@ function focusSorter() {
   if (sorterRow) sorterRow.checked = true;
   const target = SORTER.origin.clone().add(new THREE.Vector3(4.3, 4.1, 0));
   tweenTo(target.clone().add(new THREE.Vector3(3.5, 1.8, 14.5)), target, 1.2);
-  infoBox.innerHTML = '<b>⑤ 四箱风选分级</b>\n四个直立箱沿风向依次排开。混合羽毛进入第一箱，重料飞不走，被第一箱收料网留住；较轻羽毛飞得更高，穿过上部连通口到达更远的箱。\n最轻绒朵连续通过前三箱，到第四箱收集。全程展示向前上扬，不作向下落料。点击「重新投料」观看完整过程。';
+  infoBox.innerHTML = '<b>⑤ 分拣</b>\n四个直立箱沿风向由矮到高排列。经过水洗、脱水、烘干和冷却的同一批羽毛，从管道连续进入分拣。重料留在最矮的第一箱；越轻飞得越高、越远，最轻绒朵到第四箱。\n入箱后羽毛一边旋转、一边飘落到箱底。点击「全程重新投料」从源头重新观看五道工序。';
 }
 document.getElementById('bSort').addEventListener('click', focusSorter);
 document.getElementById('sortRestart').addEventListener('click', () => {
   restartSorter(); animOn = true; document.getElementById('bAnim').classList.add('on');
-  focusSorter(); updateSorterReadout(1);
+  tw.active = false; startTour(); updateSorterReadout(1);
 });
 function stopTour() {
   tourOn = false; bTour.classList.remove('on'); controls.enabled = true;
@@ -2614,7 +2808,7 @@ function stepTour(dt) {
   if (!tourOn) return;
   const st = tourStation(); if (!st) { stopTour(); return; }
   tourT += dt;
-  const MOVE = 2.5, DWELL = st.mod.no === 5 ? 14.0 : 1.5;
+  const MOVE = 2.5, DWELL = [0, 6, 4, 7, 5, 14][st.mod.no] || 2;
   if (tourPhase === 'move') {
     if (!tw.active && tourT < 0.1) {
       tweenTo(st.pos, st.tg, MOVE);
@@ -2688,9 +2882,8 @@ let firstFrame = true;
 
   /* X 光淡出量平滑过渡 + 羽绒流推进 */
   xrayU.uXrayAmt.value += (xrayTarget - xrayU.uXrayAmt.value) * Math.min(1, dt * 3);
-  if (animOn && flow.visible) stepFlow(dt, clock.elapsedTime);
+  if (animOn) stepFlow(dt); else drawFlowParticles();
   if (animOn && sorterGroup.visible) {
-    stepSorter(dt);
     SORTER.airArrows.forEach((arrow, i) => {
       const x = (sorterState.time * 1.2 + i * 1.1) % 9.0;
       arrow.position.set(x, 3.6 + 0.43 * x, -0.72);
