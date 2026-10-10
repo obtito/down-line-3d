@@ -11,11 +11,26 @@
   canvas{display:block}
   #vignette{position:fixed;inset:0;pointer-events:none;z-index:5;
     background:radial-gradient(ellipse at 50% 42%,transparent 55%,rgba(20,30,50,.16) 100%)}
-  #panel{position:fixed;top:14px;left:14px;width:250px;max-height:calc(100% - 28px);overflow:auto;
+  #panel{position:fixed;top:60px;left:14px;width:250px;max-height:calc(100% - 74px);overflow:auto;
     background:rgba(15,23,42,.82);color:#e5e9ef;border-radius:14px;padding:14px 14px 10px;
     box-shadow:0 8px 28px rgba(0,0,0,.28);font-size:13px;line-height:1.5;
     backdrop-filter:blur(8px);z-index:10;border:1px solid rgba(148,163,184,.18)}
   #panel h1{font-size:15px;margin:0 0 2px;color:#fff;letter-spacing:.5px}
+  #panel[hidden]{display:none}
+  #panelToggle{position:fixed;top:14px;left:14px;z-index:20;min-height:36px;
+    border:1px solid rgba(255,255,255,.25);border-radius:9px;padding:7px 12px;
+    background:#2563eb;color:#fff;font-size:13px;font-weight:600;cursor:pointer;
+    box-shadow:0 4px 14px rgba(0,0,0,.24)}
+  #panelToggle:hover{background:#1d4ed8}
+  #panelToggle:focus-visible,.speed-buttons button:focus-visible{outline:2px solid #7dd3fc;outline-offset:3px}
+  .speed-controls{margin-bottom:10px;padding:9px;border:1px solid #475569;border-radius:9px;background:rgba(2,6,23,.3)}
+  .speed-row + .speed-row{margin-top:10px}
+  .speed-label{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;font-size:12px}
+  .speed-label output{color:#7dd3fc;font-weight:600;font-variant-numeric:tabular-nums}
+  .speed-buttons{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .speed-buttons button{min-height:28px;border:0;border-radius:6px;background:#334155;color:#e2e8f0;font-size:12px;cursor:pointer}
+  .speed-buttons button:hover:not(:disabled){background:#475569}
+  .speed-buttons button:disabled{opacity:.4;cursor:default}
   #panel .sub{font-size:10.5px;color:#9fb0c8;margin-bottom:10px}
   .btns{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
   .btns button{flex:1 1 30%;font-size:12px;padding:6px 4px;border:0;border-radius:8px;cursor:pointer;
@@ -41,27 +56,34 @@
     background:#e3e7ea;color:#334155;font-size:15px;z-index:99}
   #loading .spin{width:38px;height:38px;border-radius:50%;border:4px solid #94a3b8;
     border-top-color:#2563eb;animation:sp 1s linear infinite}
-  #sortPanel{position:fixed;right:14px;bottom:14px;width:244px;z-index:10;
-    background:rgba(15,23,42,.88);border:1px solid #526879;border-radius:14px;
-    color:#e2e8f0;padding:14px;font-size:12px;line-height:1.65;backdrop-filter:blur(8px)}
-  #sortPanel b{font-size:14px;color:#b9f0df}
-  #sortPanel p{margin:5px 0 10px;color:#afc0d3;font-size:11px}
-  #sortPanel .grade{display:flex;align-items:center;gap:8px;padding:5px 0}
-  #sortPanel i{width:9px;height:9px;border-radius:50%;display:block;background:var(--grade)}
-  #sortPanel .count{margin-left:auto;font-variant-numeric:tabular-nums;color:#cbd5e1}
-  #sortPanel button{background:#334155;border:1px solid #526879;border-radius:7px;
-    color:#f1f5f9;padding:6px 10px;cursor:pointer;margin-top:9px}
-  #sortPanel small{display:block;margin-top:8px;color:#93a5ba;font-size:10px}
-  @media(max-width:800px){#sortPanel{width:186px;right:8px;bottom:8px;padding:10px}
-    #panel{width:210px}#info{max-width:calc(100% - 260px);font-size:11px}}
+  @media(max-width:800px){
+    #panel{width:210px}#info{max-width:calc(100% - 240px);font-size:11px}}
   @keyframes sp{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
 <div id="vignette"></div>
+<button id="panelToggle" type="button" aria-expanded="true" aria-controls="panel" title="收起控制面板">收起控制面板</button>
 <div id="panel">
   <h1>羽绒水洗生产线 · 3D 结构复原</h1>
+  <div id="panelBody">
   <div class="sub">水洗机按实拍照片重建<br/>末道工序：分拣（四箱风选原理）</div>
+  <div class="speed-controls">
+    <div class="speed-row">
+      <div class="speed-label"><span>镜头切换时长</span><output id="cameraSpeedValue" aria-live="polite">1.8 秒</output></div>
+      <div class="speed-buttons">
+        <button id="cameraFaster" type="button" aria-label="加快镜头切换">快一点</button>
+        <button id="cameraSlower" type="button" aria-label="放慢镜头切换">慢一点</button>
+      </div>
+    </div>
+    <div class="speed-row">
+      <div class="speed-label"><span>羽毛速度</span><output id="featherSpeedValue" aria-live="polite">3.0×</output></div>
+      <div class="speed-buttons">
+        <button id="featherSlower" type="button" aria-label="降低羽毛速度">减速</button>
+        <button id="featherFaster" type="button" aria-label="提高羽毛速度">加速</button>
+      </div>
+    </div>
+  </div>
   <div class="btns">
     <button id="bView">重置视角</button>
     <button id="bExplode">爆炸视图</button>
@@ -73,27 +95,32 @@
     <button id="bShot">截图 PNG</button>
   </div>
   <div id="mods"></div>
+  </div>
 </div>
 <div id="info"><b>使用说明</b>
 <b>①水洗 → ②脱水 → ③烘干 → ④冷却 → ⑤分拣</b> 五大主机带编号标注；
 点击任意设备 → 左下角显示结构说明，镜头自动聚焦；悬停设备高亮。
 「工艺巡览」：沿五大主机依次走一遍，<b>面向视角的设备表面自动变透明</b>，
 4500 片羽毛连续经过五道工序，同一片羽毛的类别、形态和颜色保持一致。
+左上角可独立调整镜头切换时长和羽毛速度；卡片上方的蓝色按钮可收起或展开控制面板。
 点击「分拣演示」：四个直立箱沿风向由矮到高排列，重料留在最矮的第一箱；越轻飞得越高、越远，最轻绒朵到最高的第四箱。
 <span class="ev">料斗/管廊/平台/电控柜为辅助设施（不编号、不进巡览），可在左侧列表隐藏。</span></div>
 <div id="tip">左键拖动旋转 · 滚轮缩放 · 右键平移 · 点击设备聚焦</div>
-<div id="sortPanel">
-  <b>分拣 · 四箱由矮到高</b>
-  <p>混合进料 → 向前上扬 → 分箱 → 旋转飘落</p>
-  <div class="grade" style="--grade:#d89b5d"><i></i>① 第一箱 · 重毛片<span class="count" id="sortCount0">0</span></div>
-  <div class="grade" style="--grade:#94a3b8"><i></i>② 第二箱 · 中重毛片<span class="count" id="sortCount1">0</span></div>
-  <div class="grade" style="--grade:#53c6d9"><i></i>③ 第三箱 · 轻羽毛<span class="count" id="sortCount2">0</span></div>
-  <div class="grade" style="--grade:#a5e6d0"><i></i>④ 第四箱 · 轻质绒朵<span class="count" id="sortCount3">0</span></div>
-  <button id="sortRestart">全程重新投料</button>
-  <small>重料箱最矮，沿风向箱体依次升高；越轻飞得越高、越远，入箱后旋转飘落。<br/>颜色区分类别，数字为箱底累计收集量；参数与结构用于原理示意。</small>
-</div>
 <div id="loading"><div class="spin"></div><div>正在初始化 3D 场景与分拣演示…</div></div>
 
+<script>
+// 收起按钮独立于卡片与 3D 初始化；隐藏卡片时始终保留展开入口。
+(() => {
+  const panel = document.getElementById('panel');
+  const toggle = document.getElementById('panelToggle');
+  toggle.addEventListener('click', () => {
+    panel.hidden = !panel.hidden;
+    toggle.ariaExpanded = String(!panel.hidden);
+    toggle.textContent = panel.hidden ? '展开控制面板' : '收起控制面板';
+    toggle.title = toggle.textContent;
+  });
+})();
+</script>
 
 
 <script>/* three.js r147 core (MIT) */
@@ -2222,6 +2249,10 @@ function xray(on) {
    https://github.com/dli/flow/blob/master/flow.js
    ===================================================================== */
 const FLOW_N = 4500, FLOW_STEP = 1 / 120;
+// 只压缩演示时间；设备、羽毛与扬尘共用倍率，工艺轨迹和分类物理参数保持一致。
+let FLOW_PLAYBACK_RATE = 3;
+let cameraSwitchSeconds = 1.8;
+const TOUR_DWELL = [0, 2, 4 / 3, 7 / 3, 5 / 3, 14 / 3];
 const SORT_CLASSES = [
   { name: '重毛片', mass: 1.00, drag: 4.3, color: 0xd89b5d, width: 0.72, length: 1.20 },
   { name: '中重毛片', mass: 0.54, drag: 4.3, color: 0x94a3b8, width: 0.87, length: 1.04 },
@@ -2336,7 +2367,7 @@ function flowStartOutlet(p, age) {
   flowBeginCurve(p, 3, age, p.zoneDuration - age, next[0], next[1], next[2], next[3], next[4], next[5], p.zone === 7 ? .30 : .18);
 }
 function enterFlowZone(p, zone) {
-  if (zone === 9) { p.zone = 9; p.zoneAge = 0; enterSorterParticle(p); return; }
+  if (zone === 9) { enterSorterParticle(p); return; }
   flowSnapshot(p);
   p.zone = zone; p.zoneAge = 0; p.zoneDuration = FLOW_DUR[zone] * (.96 + .08 * p.seed2);
   p.mode = 0; p.angle = 0;
@@ -2496,7 +2527,7 @@ flowGeo.setAttribute('aColor', new THREE.InstancedBufferAttribute(fCol, 3));
 flowGeo.setAttribute('aAlpha', new THREE.InstancedBufferAttribute(fAlpha, 1).setUsage(THREE.DynamicDrawUsage));
 flowGeo.instanceCount = FLOW_N;
 const featherMaterial = new THREE.ShaderMaterial({
-  side: THREE.DoubleSide, transparent: true, depthWrite: false,
+  side: THREE.DoubleSide, transparent: false, depthWrite: true,
   vertexShader: `
     attribute vec3 aPosition; attribute vec4 aQuaternion; attribute vec3 aScale;
     attribute vec3 aColor; attribute float aAlpha;
@@ -2513,10 +2544,12 @@ const featherMaterial = new THREE.ShaderMaterial({
     varying vec3 vColor; varying vec2 vLeaf; varying float vAlpha; varying float vLight;
     void main() {
       if (vAlpha < 0.003) discard;
+      float threshold = (mod(floor(gl_FragCoord.x), 2.0) * 2.0 + mod(floor(gl_FragCoord.y), 2.0) + 0.5) * 0.25;
+      if (vAlpha < threshold) discard;
       float shaft = 1.0 - smoothstep(0.002, 0.006, abs(vLeaf.x));
       float barb = pow(max(0.0, cos((vLeaf.y - abs(vLeaf.x) * 0.72) * 205.0)), 12.0);
       vec3 c = mix(vColor, vec3(0.95, 0.98, 1.0), min(0.8, shaft * 0.7 + barb * 0.28));
-      gl_FragColor = vec4(c * vLight, vAlpha);
+      gl_FragColor = vec4(c * vLight, 1.0);
       #include <tonemapping_fragment>
       #include <encodings_fragment>
     }`
@@ -2571,11 +2604,11 @@ function advanceSorterParticle(p, dt, time) {
       0.32 * Math.sin(flutter) + Math.atan2(-p.vx, Math.abs(p.vy) + 0.5)));
     p.q.slerp(flowTmpQ, 1 - Math.exp(-12 * dt));
     const b = SORTER.bins[p.chamber], endX = SORTER.origin.x + b.maxX;
-    if (p.x >= endX - 0.18) {
+    if (p.x >= endX - 0.26) {
       if (p.chamber < 3 && p.y >= b.gateY + 0.18) p.chamber++;
       else {
         flowEuler.setFromQuaternion(p.q); p.rx = flowEuler.x; p.ry = flowEuler.y; p.rz = flowEuler.z;
-        p.bin = p.chamber; p.phase = 1; p.x = endX - 0.18; p.vx = p.vy = p.vz = 0;
+        p.bin = p.chamber; p.phase = 1; p.vx = p.vy = p.vz = 0;
         p.captureX = p.x; p.captureZ = p.z; p.captureTime = 0;
         p.dropX = SORTER.origin.x + b.centerX + 0.36 * Math.sin(p.id * 2.17 + p.cycle);
         p.dropZ = 0.43 * Math.sin(p.id * 1.37 + p.cycle * 0.6);
@@ -2636,11 +2669,11 @@ function advanceFlowParticle(p, dt, time) {
   else {
     advanceProcessParticle(p, dt, time);
     if (p.zone === 9 && p.sortCarryDt > 0) { advanceSorterParticle(p, p.sortCarryDt, time); p.sortCarryDt = 0; }
+    if (p.zone !== 9) orientProcessParticle(p, dt, time);
   }
 }
-function drawFlowParticles(dt = 0) {
+function drawFlowParticles() {
   for (const p of flowParticles) {
-    if (p.zone !== 9) orientProcessParticle(p, dt, p.lifeTime);
     const k = p.id * 3, q = p.id * 4, owner = flowOwners[p.zone];
     fPos[k] = p.x; fPos[k + 1] = p.y; fPos[k + 2] = p.z; fZone[p.id] = p.zone;
     fRenderPos[k] = p.x; fRenderPos[k + 1] = p.y + (owner.group.position.y - owner.baseY); fRenderPos[k + 2] = p.z;
@@ -2648,39 +2681,52 @@ function drawFlowParticles(dt = 0) {
     const visible = owner.group.visible && (p.zone === 9 || flow.visible);
     const emit = p.zone === 0 ? THREE.MathUtils.smoothstep(p.zoneAge, 0, 0.3) : 1;
     const fade = p.zone === 9 && p.phase === 3 ? 1 - THREE.MathUtils.smoothstep(p.settle, 3.5 + (p.id % 6) * 0.4, 4 + (p.id % 6) * 0.4) : 1;
-    fAlpha[p.id] = visible && p.wait <= 0 ? emit * fade * 0.96 : 0;
+    fAlpha[p.id] = visible && p.wait <= 0 ? emit * fade : 0;
   }
   flowGeo.attributes.aPosition.needsUpdate = true;
   flowGeo.attributes.aQuaternion.needsUpdate = true;
   flowGeo.attributes.aAlpha.needsUpdate = true;
 }
 function stepFlow(dt) {
-  let advanced = 0;
-  flowState.carry += Math.min(dt, 0.1);
+  flowState.carry += Math.min(dt, 0.05 * FLOW_PLAYBACK_RATE);
   while (flowState.carry + 1e-10 >= FLOW_STEP) {
     flowState.time += FLOW_STEP;
     for (const p of flowParticles) advanceFlowParticle(p, FLOW_STEP, flowState.time);
     flowState.carry -= FLOW_STEP;
-    advanced += FLOW_STEP;
   }
-  drawFlowParticles(advanced);
+  drawFlowParticles();
 }
 function resetFlow(steady = false) {
   flowState.time = 0; flowState.carry = 0; flowState.collected.fill(0); flowState.total = 0; flowState.cycles = 0;
-  const total = FLOW_DUR.reduce((a, b) => a + b, 0) + 10;
+  const processDuration = FLOW_DUR.reduce((a, b) => a + b, 0);
   for (const p of flowParticles) {
     p.cycle = 0; p.wait = 0; p.phase = 0; p.settle = 0; p.lifeTime = 0; p.q.identity();
     enterFlowZone(p, 0); sampleFlowRoute(p, 0);
     if (steady) {
-      let age = p.seed0 * total;
-      // 独立预热同一个对象，不在设备之间创建新对象；初屏即为连续生产稳态。
-      for (let t = FLOW_STEP; age > 1e-8; t += FLOW_STEP) {
-        const dt = Math.min(FLOW_STEP, age); advanceFlowParticle(p, dt, t); age -= dt;
+      const factor = 0.96 + 0.08 * p.seed2;
+      const sortDuration = [3.6, 4.8, 6.4, 8.8][p.kind] + 4 + (p.id % 6) * 0.4;
+      let age = p.seed0 * (processDuration * factor + sortDuration), zone = 0;
+      // 生产稳态直接从各区域的真实入口初始化，只预热本区域；避免启动时重复模拟整条线。
+      while (zone < 9 && age >= FLOW_DUR[zone] * factor) {
+        age -= FLOW_DUR[zone] * factor; p.lifeTime += FLOW_DUR[zone] * factor; zone++;
+      }
+      if (zone > 0) {
+        const pipeZone = zone === 9 ? 8 : zone % 2 ? zone - 1 : zone;
+        p.zone = pipeZone; p.zoneDuration = FLOW_DUR[pipeZone] * factor;
+        sampleFlowRoute(p, zone % 2 ? 1 : 0); enterFlowZone(p, zone);
+      }
+      if (FLOW_ROUTES[p.zone]) {
+        p.zoneAge = age; p.lifeTime += age; sampleFlowRoute(p, age / p.zoneDuration);
+      } else {
+        while (age > 1e-8) {
+          const dt = Math.min(FLOW_STEP, age); advanceFlowParticle(p, dt, p.lifeTime + dt); age -= dt;
+        }
       }
     } else p.wait = p.id * 0.009;
+    if (p.zone !== 9) orientProcessParticle(p, 1, p.lifeTime);
   }
   flowState.collected.fill(0); flowState.total = 0; flowState.cycles = 0;
-  drawFlowParticles(1);
+  drawFlowParticles();
 }
 function restartSorter() { resetFlow(false); }
 for (let id = 0; id < FLOW_N; id++) flowParticles.push(newFlowParticle(id));
@@ -2689,6 +2735,33 @@ resetFlow(true);
 
 
 /* ================= UI ================= */
+const cameraFaster = document.getElementById('cameraFaster'), cameraSlower = document.getElementById('cameraSlower');
+const featherFaster = document.getElementById('featherFaster'), featherSlower = document.getElementById('featherSlower');
+function updateSpeedControls() {
+  document.getElementById('cameraSpeedValue').textContent = cameraSwitchSeconds.toFixed(1) + ' 秒';
+  document.getElementById('featherSpeedValue').textContent = FLOW_PLAYBACK_RATE.toFixed(1) + '×';
+  cameraFaster.disabled = cameraSwitchSeconds <= 0.6;
+  cameraSlower.disabled = cameraSwitchSeconds >= 4;
+  featherSlower.disabled = FLOW_PLAYBACK_RATE <= 0.5;
+  featherFaster.disabled = FLOW_PLAYBACK_RATE >= 4;
+}
+function adjustCameraSpeed(delta) {
+  cameraSwitchSeconds = Math.round(THREE.MathUtils.clamp(cameraSwitchSeconds + delta, 0.6, 4) * 10) / 10;
+  if (tw.active) {
+    tw.t = tw.t / tw.dur * cameraSwitchSeconds;
+    tw.dur = cameraSwitchSeconds;
+  }
+  updateSpeedControls();
+}
+function adjustFeatherSpeed(delta) {
+  FLOW_PLAYBACK_RATE = Math.round(THREE.MathUtils.clamp(FLOW_PLAYBACK_RATE + delta, 0.5, 4) * 10) / 10;
+  updateSpeedControls();
+}
+cameraFaster.addEventListener('click', () => adjustCameraSpeed(-0.2));
+cameraSlower.addEventListener('click', () => adjustCameraSpeed(0.2));
+featherSlower.addEventListener('click', () => adjustFeatherSpeed(-0.5));
+featherFaster.addEventListener('click', () => adjustFeatherSpeed(0.5));
+updateSpeedControls();
 const infoBox = document.getElementById('info');
 const modsDiv = document.getElementById('mods');
 MODULES.forEach((m, i) => {
@@ -2716,7 +2789,7 @@ document.getElementById('bOrbit').addEventListener('click', e => {
   controls.autoRotate = !controls.autoRotate; e.target.classList.toggle('on', controls.autoRotate);
 });
 document.getElementById('bView').addEventListener('click', () => {
-  stopTour(); tweenTo(HOME_POS, HOME_TG, 1.0);
+  stopTour(); tweenTo(HOME_POS, HOME_TG);
   document.getElementById('bSort').classList.remove('on');
   explodeTarget = 0; bExplode.classList.remove('on');
 });
@@ -2730,7 +2803,7 @@ document.getElementById('bShot').addEventListener('click', () => {
 /* ================= 相机补间 / 巡览 ================= */
 const easeIO = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 const tw = { active: false, t: 0, dur: 1, fp: new THREE.Vector3(), tp: new THREE.Vector3(), ft: new THREE.Vector3(), tt: new THREE.Vector3() };
-function tweenTo(pos, tg, dur) {
+function tweenTo(pos, tg, dur = cameraSwitchSeconds) {
   tw.active = true; tw.t = 0; tw.dur = dur;
   tw.fp.copy(camera.position); tw.tp.copy(pos);
   tw.ft.copy(controls.target); tw.tt.copy(tg);
@@ -2745,16 +2818,8 @@ function stepTween(dt) {
   if (tw.t >= tw.dur) { tw.active = false; controls.enabled = true; }
 }
 
-let tourOn = false, tourIdx = 0, tourT = 0, tourPhase = 'move';
+let tourOn = false, tourIdx = 0, tourT = 0, tourPhase = 'move', tourMoveStarted = false;
 const bTour = document.getElementById('bTour');
-const sortCountEls = SORTER.bins.map((_, i) => document.getElementById('sortCount' + i));
-let sortReadoutTime = 1;
-function updateSorterReadout(dt) {
-  sortReadoutTime += dt;
-  if (sortReadoutTime < 0.25) return;
-  sortReadoutTime = 0;
-  sortCountEls.forEach((el, i) => el.textContent = String(sorterState.collected[i]));
-}
 function focusSorter() {
   stopTour(); controls.autoRotate = false;
   document.getElementById('bOrbit').classList.remove('on');
@@ -2764,14 +2829,10 @@ function focusSorter() {
   const sorterRow = modsDiv.querySelectorAll('input')[MODULES.findIndex(m => m.no === 5)];
   if (sorterRow) sorterRow.checked = true;
   const target = SORTER.origin.clone().add(new THREE.Vector3(4.3, 4.1, 0));
-  tweenTo(target.clone().add(new THREE.Vector3(3.5, 1.8, 14.5)), target, 1.2);
-  infoBox.innerHTML = '<b>⑤ 分拣</b>\n四个直立箱沿风向由矮到高排列。经过水洗、脱水、烘干和冷却的同一批羽毛，从管道连续进入分拣。重料留在最矮的第一箱；越轻飞得越高、越远，最轻绒朵到第四箱。\n入箱后羽毛一边旋转、一边飘落到箱底。点击「全程重新投料」从源头重新观看五道工序。';
+  tweenTo(target.clone().add(new THREE.Vector3(3.5, 1.8, 14.5)), target);
+  infoBox.innerHTML = '<b>⑤ 分拣</b>\n四个直立箱沿风向由矮到高排列。经过水洗、脱水、烘干和冷却的同一批羽毛，从管道连续进入分拣。重料留在最矮的第一箱；越轻飞得越高、越远，最轻绒朵到第四箱。\n入箱后羽毛一边旋转、一边飘落到箱底。';
 }
 document.getElementById('bSort').addEventListener('click', focusSorter);
-document.getElementById('sortRestart').addEventListener('click', () => {
-  restartSorter(); animOn = true; document.getElementById('bAnim').classList.add('on');
-  tw.active = false; startTour(); updateSorterReadout(1);
-});
 function stopTour() {
   tourOn = false; bTour.classList.remove('on'); controls.enabled = true;
   xray(false); flow.visible = false; dust.visible = false;
@@ -2779,7 +2840,8 @@ function stopTour() {
 function startTour() {
   document.getElementById('bSort').classList.remove('on');
   tourOn = true; bTour.classList.add('on');
-  tourIdx = 0; tourT = 0; tourPhase = 'move'; controls.enabled = false; controls.autoRotate = false;
+  tourIdx = 0; tourT = 0; tourPhase = 'move'; tourMoveStarted = false; tw.active = false;
+  controls.enabled = false; controls.autoRotate = false;
   document.getElementById('bOrbit').classList.remove('on');
   explodeTarget = 0; bExplode.classList.remove('on');   /* 收起爆炸视图 */
   xray(true); flow.visible = true; dust.visible = true; /* 视角透视 + 羽绒工艺流 + 扬尘 */
@@ -2807,15 +2869,18 @@ function showTourInfo(m, moving) {                     /* moving=true 时标注"
 function stepTour(dt) {
   if (!tourOn) return;
   const st = tourStation(); if (!st) { stopTour(); return; }
-  tourT += dt;
-  const MOVE = 2.5, DWELL = [0, 6, 4, 7, 5, 14][st.mod.no] || 2;
+  const DWELL = TOUR_DWELL[st.mod.no] || 2 / 3;
   if (tourPhase === 'move') {
-    if (!tw.active && tourT < 0.1) {
-      tweenTo(st.pos, st.tg, MOVE);
-      showTourInfo(st.mod, true);                     /* 起飞即显示本站介绍（提早 2.5 秒） */
+    if (!tourMoveStarted) {
+      tweenTo(st.pos, st.tg);
+      tourMoveStarted = true;
+      showTourInfo(st.mod, true);                     /* 镜头移动时就显示本站介绍。 */
     }
-    if (tourT >= MOVE) { tourPhase = 'dwell'; tourT = 0; showTourInfo(st.mod, false); }
-  } else if (tourT >= DWELL) { tourIdx++; tourPhase = 'move'; tourT = 0; }
+    if (!tw.active) { tourPhase = 'dwell'; tourT = 0; showTourInfo(st.mod, false); }
+  } else {
+    tourT += dt;
+    if (tourT >= DWELL) { tourIdx++; tourPhase = 'move'; tourT = 0; tourMoveStarted = false; }
+  }
 }
 
 /* ================= 拾取：悬停高亮 + 点击聚焦 ================= */
@@ -2861,7 +2926,7 @@ renderer.domElement.addEventListener('pointerup', e => {
   const size = bb.getSize(new THREE.Vector3()).length();
   const dir = camera.position.clone().sub(c).normalize();
   const dist = Math.min(Math.max(size * 1.05, 7), 22);
-  tweenTo(c.clone().addScaledVector(dir, dist), c, 0.95);
+  tweenTo(c.clone().addScaledVector(dir, dist), c);
 });
 
 /* ================= 主循环 ================= */
@@ -2882,20 +2947,20 @@ let firstFrame = true;
 
   /* X 光淡出量平滑过渡 + 羽绒流推进 */
   xrayU.uXrayAmt.value += (xrayTarget - xrayU.uXrayAmt.value) * Math.min(1, dt * 3);
-  if (animOn) stepFlow(dt); else drawFlowParticles();
+  const processDt = dt * FLOW_PLAYBACK_RATE;
+  if (animOn) stepFlow(processDt); else drawFlowParticles();
   if (animOn && sorterGroup.visible) {
     SORTER.airArrows.forEach((arrow, i) => {
       const x = (sorterState.time * 1.2 + i * 1.1) % 9.0;
       arrow.position.set(x, 3.6 + 0.43 * x, -0.72);
     });
   }
-  updateSorterReadout(dt);
 
-  if (animOn) animParts.forEach(p => { p.obj.rotation[p.axis] += p.speed * dt; });
+  if (animOn) animParts.forEach(p => { p.obj.rotation[p.axis] += p.speed * processDt; });
   if (animOn && dust.visible) {
     const arr = dust.geometry.attributes.position.array;
     for (let i = 0; i < DUST_N; i++) {
-      arr[i * 3 + 1] -= dustVel[i] * dt;
+      arr[i * 3 + 1] -= dustVel[i] * processDt;
       if (arr[i * 3 + 1] < (dustZone[i] ? 3.55 : 3.0)) resetDust(i, false);
     }
     dust.geometry.attributes.position.needsUpdate = true;
