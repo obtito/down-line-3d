@@ -3,28 +3,27 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<meta name="color-scheme" content="light"/>
+<meta name="color-scheme" content="dark"/>
 <title>羽绒水洗生产线 · 水洗、脱水、烘干、冷却、分拣</title>
 <style>
-  html,body{margin:0;height:100%;overflow:hidden;background:#e3e7ea;
+  html,body{margin:0;height:100%;overflow:hidden;background:#0b1220;
     font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;}
   canvas{display:block}
   #vignette{position:fixed;inset:0;pointer-events:none;z-index:5;
-    background:radial-gradient(ellipse at 50% 42%,transparent 55%,rgba(20,30,50,.16) 100%)}
+    background:radial-gradient(ellipse at 50% 42%,transparent 55%,rgba(0,0,0,.28) 100%)}
   #panel{position:fixed;top:60px;left:14px;width:250px;max-height:calc(100% - 74px);overflow:auto;
     background:rgba(15,23,42,.82);color:#e5e9ef;border-radius:14px;padding:14px 14px 10px;
     box-shadow:0 8px 28px rgba(0,0,0,.28);font-size:13px;line-height:1.5;
     backdrop-filter:blur(8px);z-index:10;border:1px solid rgba(148,163,184,.18)}
   #panel h1{font-size:15px;margin:0 0 2px;color:#fff;letter-spacing:.5px}
-  #panel[hidden],#info[hidden]{display:none}
-  #panelToggle,#infoToggle{position:fixed;left:14px;z-index:20;min-height:36px;
+  #panel[hidden]{display:none}
+  #panelToggle{position:fixed;left:14px;z-index:20;min-height:36px;
     border:1px solid rgba(255,255,255,.25);border-radius:9px;padding:7px 12px;
     background:#2563eb;color:#fff;font-size:13px;font-weight:600;cursor:pointer;
     box-shadow:0 4px 14px rgba(0,0,0,.24)}
   #panelToggle{top:14px}
-  #infoToggle{bottom:14px}
-  #panelToggle:hover,#infoToggle:hover{background:#1d4ed8}
-  #panelToggle:focus-visible,#infoToggle:focus-visible,.speed-buttons button:focus-visible{outline:2px solid #7dd3fc;outline-offset:3px}
+  #panelToggle:hover{background:#1d4ed8}
+  #panelToggle:focus-visible,.speed-buttons button:focus-visible{outline:2px solid #7dd3fc;outline-offset:3px}
   .speed-controls{margin-bottom:10px;padding:9px;border:1px solid #475569;border-radius:9px;background:rgba(2,6,23,.3)}
   .speed-row + .speed-row{margin-top:10px}
   .speed-label{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;font-size:12px}
@@ -46,21 +45,14 @@
   #mods input{accent-color:#2563eb}
   #mods .no{color:#7dd3fc;font-size:11px;width:14px;text-align:center}
   #mods .infer{color:#fbbf24;font-size:10px}
-  #info{position:fixed;left:14px;bottom:60px;width:352px;max-width:calc(100% - 28px);
-    max-height:calc(100% - 102px);overflow:auto;
-    background:rgba(15,23,42,.88);color:#e5e9ef;border-radius:14px;padding:13px 15px;font-size:12.5px;
-    line-height:1.6;box-shadow:0 8px 28px rgba(0,0,0,.28);z-index:10;white-space:pre-line;
-    border:1px solid rgba(148,163,184,.18)}
-  #info b{color:#93c5fd;font-size:13.5px}
-  #info .ev{color:#86efac;font-size:11.5px}
   #tip{position:fixed;right:14px;top:14px;background:rgba(15,23,42,.7);color:#cbd5e1;font-size:11.5px;
     padding:6px 11px;border-radius:9px;z-index:10;backdrop-filter:blur(6px)}
   #loading{position:fixed;inset:0;display:flex;flex-direction:column;gap:14px;align-items:center;justify-content:center;
-    background:#e3e7ea;color:#334155;font-size:15px;z-index:99}
-  #loading .spin{width:38px;height:38px;border-radius:50%;border:4px solid #94a3b8;
-    border-top-color:#2563eb;animation:sp 1s linear infinite}
+    background:#0b1220;color:#e2e8f0;font-size:15px;z-index:99}
+  #loading .spin{width:38px;height:38px;border-radius:50%;border:4px solid #334155;
+    border-top-color:#60a5fa;animation:sp 1s linear infinite}
   @media(max-width:800px){
-    #panel{width:210px}#info{max-width:calc(100% - 240px);font-size:11px}}
+    #panel{width:210px}}
   @keyframes sp{to{transform:rotate(360deg)}}
 </style>
 </head>
@@ -100,31 +92,20 @@
   <div id="mods"></div>
   </div>
 </div>
-<button id="infoToggle" type="button" aria-expanded="true" aria-controls="info" title="收起介绍卡片">收起介绍卡片</button>
-<div id="info"><b>使用说明</b>
-<b>①水洗 → ②脱水 → ③烘干 → ④冷却 → ⑤分拣</b> 五大主机带编号标注；
-点击任意设备 → 左下角显示结构说明，镜头自动聚焦；悬停设备高亮。
-「工艺巡览」：沿五大主机依次走一遍，<b>面向视角的设备表面自动变透明</b>，
-4500 片羽毛连续经过五道工序，同一片羽毛的类别、形态和颜色保持一致。
-左上角可独立调整镜头切换时长和羽毛速度；卡片上方的蓝色按钮可收起或展开控制面板。
-点击「分拣演示」：四个直立箱沿风向由矮到高排列，重料留在最矮的第一箱；越轻飞得越高、越远，最轻绒朵到最高的第四箱。
-<span class="ev">料斗/管廊/平台/电控柜为辅助设施（不编号、不进巡览），可在左侧列表隐藏。</span></div>
 <div id="tip">左键拖动旋转 · 滚轮缩放 · 右键平移 · 点击设备聚焦</div>
 <div id="loading"><div class="spin"></div><div>正在初始化 3D 场景与分拣演示…</div></div>
 
 <script>
-// 两个收起按钮独立于卡片与 3D 初始化；隐藏卡片时始终保留各自的展开入口。
+// 收起按钮独立于卡片与 3D 初始化；隐藏面板时保留展开入口。
 (() => {
-  for (const [cardId, buttonId, label] of [['panel', 'panelToggle', '控制面板'], ['info', 'infoToggle', '介绍卡片']]) {
-    const card = document.getElementById(cardId);
-    const toggle = document.getElementById(buttonId);
-    toggle.addEventListener('click', () => {
-      card.hidden = !card.hidden;
-      toggle.ariaExpanded = String(!card.hidden);
-      toggle.textContent = (card.hidden ? '展开' : '收起') + label;
-      toggle.title = toggle.textContent;
-    });
-  }
+  const card = document.getElementById('panel');
+  const toggle = document.getElementById('panelToggle');
+  toggle.addEventListener('click', () => {
+    card.hidden = !card.hidden;
+    toggle.ariaExpanded = String(!card.hidden);
+    toggle.textContent = (card.hidden ? '展开' : '收起') + '控制面板';
+    toggle.title = toggle.textContent;
+  });
 })();
 </script>
 
@@ -1531,8 +1512,8 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.body.appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xe3e7ea);
-scene.fog = new THREE.Fog(0xe3e7ea, 55, 165);
+scene.background = new THREE.Color(0x0b1220);
+scene.fog = new THREE.Fog(0x0b1220, 55, 165);
 
 const camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, 0.1, 320);
 const HOME_POS = new THREE.Vector3(27, 15, 32), HOME_TG = new THREE.Vector3(3, 3.1, 0);
@@ -2172,7 +2153,7 @@ let sorterGroup;
 /* ---------- 环境：地坪 / 厂房柱 / 安全通道 / 流向箭头 / 比例人偶 ---------- */
 {
   const floor = new THREE.Mesh(new THREE.PlaneGeometry(68, 36),
-    pbr({ map: texConcrete, roughness: 0.95, metalness: 0, envMapIntensity: 0.18 }));
+    pbr({ color: 0x334155, map: texConcrete, roughness: 0.95, metalness: 0, envMapIntensity: 0.18 }));
   floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
 
 
@@ -2768,7 +2749,6 @@ cameraSlower.addEventListener('click', () => adjustCameraSpeed(0.2));
 featherSlower.addEventListener('click', () => adjustFeatherSpeed(-0.5));
 featherFaster.addEventListener('click', () => adjustFeatherSpeed(0.5));
 updateSpeedControls();
-const infoBox = document.getElementById('info');
 const modsDiv = document.getElementById('mods');
 MODULES.forEach((m, i) => {
   const row = document.createElement('label'); row.className = 'row';
@@ -2836,7 +2816,6 @@ function focusSorter() {
   if (sorterRow) sorterRow.checked = true;
   const target = SORTER.origin.clone().add(new THREE.Vector3(4.3, 4.1, 0));
   tweenTo(target.clone().add(new THREE.Vector3(3.5, 1.8, 14.5)), target);
-  infoBox.innerHTML = '<b>⑤ 分拣</b>\n四个直立箱沿风向由矮到高排列。经过水洗、脱水、烘干和冷却的同一批羽毛，从管道连续进入分拣。重料留在最矮的第一箱；越轻飞得越高、越远，最轻绒朵到第四箱。\n入箱后羽毛一边旋转、一边飘落到箱底。';
 }
 document.getElementById('bSort').addEventListener('click', focusSorter);
 function stopTour() {
@@ -2865,13 +2844,6 @@ function tourStation() {
   const off = m.no === 5 ? new THREE.Vector3(3.5, 1.8, 14.5) : (m.no === 7 || m.no === 8) ? new THREE.Vector3(3.5, 3.2, 6.5) : new THREE.Vector3(5.2, 4.0, 8.2);
   return { mod: m, pos: c.clone().add(off), tg: c };
 }
-function showTourInfo(m, moving) {                     /* moving=true 时标注"正在前往" */
-  const inf = m.inferred ? ' <span class="ev">［推断件，非实拍］</span>' : '';
-  const majors = MODULES.filter(x => x.major);
-  const idx = majors.indexOf(m) + 1;
-  infoBox.innerHTML = (moving ? '<span class="ev">→ 正在前往…</span>\n' : '') +
-    '<b>【巡览 ' + idx + '/' + majors.length + '】' + m.no + ' · ' + m.name + '</b>' + inf + '\n' + m.info;
-}
 function stepTour(dt) {
   if (!tourOn) return;
   const st = tourStation(); if (!st) { stopTour(); return; }
@@ -2880,9 +2852,8 @@ function stepTour(dt) {
     if (!tourMoveStarted) {
       tweenTo(st.pos, st.tg);
       tourMoveStarted = true;
-      showTourInfo(st.mod, true);                     /* 镜头移动时就显示本站介绍。 */
     }
-    if (!tw.active) { tourPhase = 'dwell'; tourT = 0; showTourInfo(st.mod, false); }
+    if (!tw.active) { tourPhase = 'dwell'; tourT = 0; }
   } else {
     tourT += dt;
     if (tourT >= DWELL) { tourIdx++; tourPhase = 'move'; tourT = 0; tourMoveStarted = false; }
@@ -2925,8 +2896,6 @@ renderer.domElement.addEventListener('pointerup', e => {
   sel = i; const m = MODULES[sel];
   glow(m, 0x2563eb, 0.34);
   boxHelper.setFromObject(m.group); boxHelper.visible = true;
-  const inf = m.inferred ? ' <span class="ev">［推断件，非实拍］</span>' : '';
-  infoBox.innerHTML = '<b>' + m.no + ' · ' + m.name + '</b>' + inf + '\n' + m.info;
   const bb = new THREE.Box3().setFromObject(m.group);
   const c = bb.getCenter(new THREE.Vector3());
   const size = bb.getSize(new THREE.Vector3()).length();
