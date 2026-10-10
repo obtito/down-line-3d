@@ -16,13 +16,15 @@
     box-shadow:0 8px 28px rgba(0,0,0,.28);font-size:13px;line-height:1.5;
     backdrop-filter:blur(8px);z-index:10;border:1px solid rgba(148,163,184,.18)}
   #panel h1{font-size:15px;margin:0 0 2px;color:#fff;letter-spacing:.5px}
-  #panel[hidden]{display:none}
-  #panelToggle{position:fixed;top:14px;left:14px;z-index:20;min-height:36px;
+  #panel[hidden],#info[hidden]{display:none}
+  #panelToggle,#infoToggle{position:fixed;left:14px;z-index:20;min-height:36px;
     border:1px solid rgba(255,255,255,.25);border-radius:9px;padding:7px 12px;
     background:#2563eb;color:#fff;font-size:13px;font-weight:600;cursor:pointer;
     box-shadow:0 4px 14px rgba(0,0,0,.24)}
-  #panelToggle:hover{background:#1d4ed8}
-  #panelToggle:focus-visible,.speed-buttons button:focus-visible{outline:2px solid #7dd3fc;outline-offset:3px}
+  #panelToggle{top:14px}
+  #infoToggle{bottom:14px}
+  #panelToggle:hover,#infoToggle:hover{background:#1d4ed8}
+  #panelToggle:focus-visible,#infoToggle:focus-visible,.speed-buttons button:focus-visible{outline:2px solid #7dd3fc;outline-offset:3px}
   .speed-controls{margin-bottom:10px;padding:9px;border:1px solid #475569;border-radius:9px;background:rgba(2,6,23,.3)}
   .speed-row + .speed-row{margin-top:10px}
   .speed-label{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;font-size:12px}
@@ -44,7 +46,8 @@
   #mods input{accent-color:#2563eb}
   #mods .no{color:#7dd3fc;font-size:11px;width:14px;text-align:center}
   #mods .infer{color:#fbbf24;font-size:10px}
-  #info{position:fixed;left:14px;bottom:14px;width:352px;max-width:calc(100% - 28px);
+  #info{position:fixed;left:14px;bottom:60px;width:352px;max-width:calc(100% - 28px);
+    max-height:calc(100% - 102px);overflow:auto;
     background:rgba(15,23,42,.88);color:#e5e9ef;border-radius:14px;padding:13px 15px;font-size:12.5px;
     line-height:1.6;box-shadow:0 8px 28px rgba(0,0,0,.28);z-index:10;white-space:pre-line;
     border:1px solid rgba(148,163,184,.18)}
@@ -97,6 +100,7 @@
   <div id="mods"></div>
   </div>
 </div>
+<button id="infoToggle" type="button" aria-expanded="true" aria-controls="info" title="收起介绍卡片">收起介绍卡片</button>
 <div id="info"><b>使用说明</b>
 <b>①水洗 → ②脱水 → ③烘干 → ④冷却 → ⑤分拣</b> 五大主机带编号标注；
 点击任意设备 → 左下角显示结构说明，镜头自动聚焦；悬停设备高亮。
@@ -109,16 +113,18 @@
 <div id="loading"><div class="spin"></div><div>正在初始化 3D 场景与分拣演示…</div></div>
 
 <script>
-// 收起按钮独立于卡片与 3D 初始化；隐藏卡片时始终保留展开入口。
+// 两个收起按钮独立于卡片与 3D 初始化；隐藏卡片时始终保留各自的展开入口。
 (() => {
-  const panel = document.getElementById('panel');
-  const toggle = document.getElementById('panelToggle');
-  toggle.addEventListener('click', () => {
-    panel.hidden = !panel.hidden;
-    toggle.ariaExpanded = String(!panel.hidden);
-    toggle.textContent = panel.hidden ? '展开控制面板' : '收起控制面板';
-    toggle.title = toggle.textContent;
-  });
+  for (const [cardId, buttonId, label] of [['panel', 'panelToggle', '控制面板'], ['info', 'infoToggle', '介绍卡片']]) {
+    const card = document.getElementById(cardId);
+    const toggle = document.getElementById(buttonId);
+    toggle.addEventListener('click', () => {
+      card.hidden = !card.hidden;
+      toggle.ariaExpanded = String(!card.hidden);
+      toggle.textContent = (card.hidden ? '展开' : '收起') + label;
+      toggle.title = toggle.textContent;
+    });
+  }
 })();
 </script>
 
